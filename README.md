@@ -1,0 +1,2 @@
+# STA9750-PROJECT-2024-FALL
+ Project repo for STA9750 Group
