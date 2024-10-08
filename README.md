@@ -2,11 +2,15 @@
 
 **Contributors**
 
+[@betelstar](https://github.com/betelstar)
+
 [@Dani-0000](https://github.com/Dani-0000)
 
 [@slyastrologer](https://github.com/slyastrologer)
 
 [@SethKauf](https://github.com/SethKauf)
+
+[@Victor-Louie](https://github.com/Victor-Louie)
 
 ## Project repo for STA9750 Group
 
