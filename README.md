@@ -10,7 +10,6 @@
 
 [@SethKauf](https://github.com/SethKauf), favorite Subway Line: A Train
 
-
 [@Victor-Louie](https://github.com/Victor-Louie)
 
 ## Project repo for STA9750 Group
