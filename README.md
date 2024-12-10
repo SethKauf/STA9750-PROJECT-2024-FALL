@@ -8,7 +8,10 @@
 
 [@slyastrologer](https://github.com/slyastrologer)
 
-[@SethKauf](https://github.com/SethKauf)
+[@SethKauf](https://github.com/SethKauf), favorite Subway Line: A Train
+
+
+[@Victor-Louie](https://github.com/Victor-Louie)
 
 [@Victor-Louie](https://github.com/Victor-Louie)
 
