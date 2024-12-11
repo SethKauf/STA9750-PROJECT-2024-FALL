@@ -10,7 +10,7 @@ library(readr)
 library(ggrepel)
 library(lubridate)
 
-setwd("MyDirectory")
+setwd("MyDirectory") 
 
 # read in data from cars csv
 cars <- read_csv("Data/vehicle_regs.csv")
@@ -45,7 +45,7 @@ cars <- cars |>
     Reg_Date = as.Date(regDate, format = "%m/%d/%Y"),   # Convert to Date
     year = year(Reg_Date)                                  # Extract year
   ) |>
-filter(class %in% c("PAS","OMT","MOT")) #Passenger, Omnibus Taxi, Motorcycle
+  filter(class %in% c("PAS","OMT","MOT")) #Passenger, Omnibus Taxi, Motorcycle
 
 head(cars)
 
@@ -107,7 +107,7 @@ ggplot(filtered_regs, aes(x = Year, y = OCC_T, fill = Label)) +
     plot.background = element_rect(fill = "gray95"),
     panel.background = element_rect(fill = "gray95", color = NA),
     plot.title = element_text(hjust = 0.5, size = 14, face = "bold"), 
-  scale_fill_brewer(palette = "Set2")) +
+    scale_fill_brewer(palette = "Set2")) +
   scale_y_continuous(labels = scales::comma) +
   scale_x_continuous(breaks = seq(min(regs$Year), max(regs$Year), by = 1))
 
@@ -227,4 +227,76 @@ ggplot(regs_tidy_filtered, aes(x = Year, y = Value, color = Label, group = Label
   ggtitle("Vehicle Registrations Over Time") +
   theme(plot.title = element_text(hjust = 0.5))
 
+##############################
+# Produce Ridership v Revenue chart
 
+df <- readxl::read_xlsx("Data/ridership_costs_summary_stats.xlsx")
+
+df$Avg_Age_Iss_DL
+
+ggplot(df, aes(x = Year)) +
+  geom_line(aes(y = Revenue_Less_Expenses / 1e9, color = "Revenue Less Expenses"), size = 1) +
+  geom_line(aes(y = Yearly_Subway_Ridership / 1e9, color = "Yearly Subway Ridership"), size = 1) +
+  scale_x_continuous(
+    breaks = seq(2017, 2023, 1),
+    limits = c(2016.5, 2023.5) 
+  ) +
+  scale_y_continuous(
+    name = "Revenue Less Expenses (Billions)",
+    labels = label_number(suffix = "B", accuracy = 0.1),
+    sec.axis = sec_axis(~ . * 1, name = "Yearly Subway Ridership (Billions)", labels = label_number(suffix = "B", accuracy = 0.1))
+  ) +
+  geom_vline(xintercept = c(2017, 2020, 2023), linetype = "dashed", color = "grey") +
+  geom_text(data = df[df$Year %in% c(2017, 2020, 2023), ],
+            aes(y = Revenue_Less_Expenses / 1e9, label = scales::dollar(Revenue_Less_Expenses, scale = 1e-9, suffix = "B")),
+            color = "#F8766D", hjust = -0.2, vjust = -0.5, size = 3.5) +
+  geom_text(data = df[df$Year %in% c(2017, 2020, 2023), ],
+            aes(y = Yearly_Subway_Ridership / 1e9, label = paste0(round(Yearly_Subway_Ridership / 1e9, 1), "B")),
+            color = "#00BFC4", hjust = -0.2, vjust = 1.5, size = 3.5) +
+  labs(
+    x = "Year",
+    color = "Legend",
+    title = "MTA Subway Ridership and Revenue:\n2017-2023"  
+  ) +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "gray95"),  
+    panel.background = element_rect(fill = "gray95", color = NA),  
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),  
+    axis.title.y = element_text(color = "#F8766D"),  
+    axis.title.y.right = element_text(color = "#00BFC4"),  
+    axis.text.y.left = element_text(angle = 45, hjust = 1)  
+  )
+
+
+ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+################## Bike Ridership Data
+bike_data <- read_csv("Data/Bicycle_Counts_20241106.csv")
+
+
+# Convert the 'date' column to date-time format
+bike_data$date <- as.POSIXct(bike_data$date, format = "%m/%d/%Y %I:%M:%S %p")
+
+bike_data_filtered <- bike_data |>
+  filter(status %in% c(4, 8, 16)) |>
+  mutate(year = year(date)) |>
+  filter(year >= 2017 & year <= 2023)
+
+#Group by year and sum the `counts` column
+yearly_counts <- bike_data_filtered |>
+  group_by(year) |>
+  summarize(total_counts = sum(counts, na.rm = TRUE))
+
+ggplot(yearly_counts, aes(x = year, y = total_counts)) +
+  geom_line(color = "blue", size = 1) +
+  geom_point(color = "darkblue", size = 3) +
+  scale_y_continuous(labels = scales::comma) +  # Format y-axis with commas
+  labs(
+    title = "NYC Bike Counts (Status: Modified, Validated, Certified)",
+    subtitle = "Yearly Bike Volume from 2017 to 2023",
+    x = "Year",
+    y = "Total Bike Volume"
+  ) +
+  theme_minimal()
