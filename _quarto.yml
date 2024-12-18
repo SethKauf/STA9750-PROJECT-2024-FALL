@@ -11,7 +11,7 @@ website:
     search: false
     left:
       - text: "Group Project"
-        href: MetroMindset_GroupProject.qmd
+        href: index.qmd
     right:
       - text: "Individual Projects"
         menu: 

@@ -1,10 +1,10 @@
 [
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Metro Mindset",
+    "objectID": "Seth_Individual_Report.html",
+    "href": "Seth_Individual_Report.html",
+    "title": "Seth Individual Report",
     "section": "",
-    "text": "TEST"
+    "text": "Introduction"
   },
   {
     "objectID": "MetroMindset_GroupProject.html",
@@ -42,10 +42,38 @@
     "text": "Crime & Safety"
   },
   {
-    "objectID": "Seth_Individual_Report.html",
-    "href": "Seth_Individual_Report.html",
-    "title": "Seth Individual Report",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Metro Mindset",
     "section": "",
-    "text": "Introduction"
+    "text": "The group at Metro Mindset consists of five New Yorkers who frequently use the MTA Subway system."
+  },
+  {
+    "objectID": "index.html#revenue-change-over-time",
+    "href": "index.html#revenue-change-over-time",
+    "title": "Metro Mindset",
+    "section": "Revenue Change Over Time",
+    "text": "Revenue Change Over Time"
+  },
+  {
+    "objectID": "index.html#other-system-comparison",
+    "href": "index.html#other-system-comparison",
+    "title": "Metro Mindset",
+    "section": "Other System Comparison",
+    "text": "Other System Comparison"
+  },
+  {
+    "objectID": "index.html#accessibility",
+    "href": "index.html#accessibility",
+    "title": "Metro Mindset",
+    "section": "Accessibility",
+    "text": "Accessibility"
+  },
+  {
+    "objectID": "index.html#crime-safety",
+    "href": "index.html#crime-safety",
+    "title": "Metro Mindset",
+    "section": "Crime & Safety",
+    "text": "Crime & Safety"
   }
 ]
