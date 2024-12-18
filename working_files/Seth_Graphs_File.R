@@ -28,6 +28,7 @@ library(tidyverse)
 
 
 
+head(cars)
 
 # read in data from cars csv
 cars <- read_csv("../data/vehicle_regs.csv")
@@ -114,7 +115,7 @@ ggplot(car_registration_plot_data, aes(x = year, y = registration_count, color =
 
 #### Car Regs -- US Census
 # Using Census Data
-regs <- readxl::read_xlsx("../data/Vehicle_Registrations_By_Boro.xlsx", sheet = "Data")
+regs <- readxl::read_xlsx("data/Vehicle_Registrations_By_Boro.xlsx", sheet = "Data")
 
 # Only want in 5 boros
 filtered_regs <- regs |>
@@ -134,24 +135,6 @@ ggplot(filtered_regs, aes(x = Year, y = OCC_T, fill = Label)) +
   ) +
   scale_y_continuous(labels = scales::comma) +
   scale_x_continuous(breaks = seq(min(regs$Year), max(regs$Year), by = 1))
-
-
-# Vehicle Registrations by County
-ggplot(regs_tidy_filtered, aes(x = Year, y = Value, fill = Label)) +
-  geom_bar(stat = "identity") + # stat="identity" tells ggplot to use the actual data
-  labs(
-    title = "Vehicle Registrations by County",
-    x = "Year",
-    y = "Registrations",
-    fill = "County"
-  ) +
-  theme_minimal() +
-  scale_y_continuous(labels = comma) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
-
-
 
 # pivot registration table
 # make the year the columns and county the Label/Index
@@ -195,6 +178,25 @@ regs_high_low <- regs_tidy_filtered |>
 # Merge high and low points back into the tidy dataset for annotations
 regs_tidy_filtered <- regs_tidy_filtered |>
   left_join(regs_high_low, by = "Label")
+
+# Vehicle Registrations by County
+ggplot(regs_tidy_filtered, aes(x = Year, y = Value, fill = Label)) +
+  geom_bar(stat = "identity") + # stat="identity" tells ggplot to use the actual data
+  labs(
+    title = "Vehicle Registrations by County",
+    x = "Year",
+    y = "Registrations",
+    fill = "County"
+  ) +
+  theme_minimal() +
+  scale_y_continuous(labels = comma) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+
+
+
 
 # making a quick linear model to try and find the
 # line of best fit for registrations
