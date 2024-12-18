@@ -20,6 +20,6 @@ website:
     
 format:
   html:
-    theme: flatly
+    theme: lux
     toc: false
     self-contained: true
