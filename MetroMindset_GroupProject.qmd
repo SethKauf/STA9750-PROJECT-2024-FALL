@@ -1,0 +1,54 @@
+---
+title: "Metro Mindset"
+format: html
+jyml:
+---
+
+# Introduction
+
+The group at Metro Mindset consists of five New Yorkers who frequently use the MTA Subway system. 
+
+
+
+# Motivating Question
+
+
+
+
+# Three R's
+
+
+
+
+# Ridership
+
+
+
+# Revenue
+
+
+## Revenue Change Over Time
+
+
+## Other System Comparison
+
+
+
+# Reliability
+
+
+## Accessibility
+
+
+## Crime & Safety 
+
+
+
+
+# Conclusion
+
+
+
+
+
+

@@ -1,0 +1,25 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "Metro Mindset"
+  description: "SOME DESCRIPTION"
+  site-url: "https://github.com/SethKauf/STA9750-PROJECT-2024-FALL/"
+  navbar:
+    background: primary
+    search: false
+    left:
+      - text: "Group Project"
+        href: MetroMindset_GroupProject.qmd
+    right:
+      - text: "Individual Projects"
+        menu: 
+          - text: "Ridership (Seth)"
+            href: Seth_Individual_Report.qmd
+    
+format:
+  html:
+    theme: flatly
+    toc: false
+    self-contained: true
