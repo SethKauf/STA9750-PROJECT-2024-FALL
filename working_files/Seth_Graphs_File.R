@@ -10,7 +10,7 @@ library(readr)
 library(ggrepel)
 library(lubridate)
 
-setwd("MyDirectory") 
+setwd("C:/Users/sethk/OneDrive/Baruch Classes/Fall 2024/STA 9750 - Basic Software Tools - NON PROJECT/Group Project")
 
 # read in data from cars csv
 cars <- read_csv("Data/vehicle_regs.csv")
@@ -93,40 +93,66 @@ ggplot(car_registration_plot_data, aes(x = year, y = registration_count, color =
 # Using Census Data
 regs <- readxl::read_xlsx("Data/Vehicles/Vehicle_Registrations_By_Boro.xlsx",sheet = "Data")
 
-# Only want in 5 boros
+# Calculate percentages and midpoints for vehicle registrations
 filtered_regs <- regs |>
-  filter(Label %in% c("BRONX", "KINGS", "NEW YORK", "QUEENS"))
+  filter(Label %in% c("BRONX", "KINGS", "NEW YORK", "QUEENS")) |>
+  group_by(Year) |>
+  arrange(Label, .by_group = TRUE) |>
+  mutate(
+    Percent_Occ = OCC_T / sum(OCC_T) * 100,
+    Bar_Midpoint_Occ = cumsum(OCC_T) - OCC_T / 2,
+    Percent_Veh = V_Ct / sum(V_Ct) * 100,
+    Bar_Midpoint_Veh = cumsum(V_Ct) - V_Ct / 2 
+  )
 
 
-# Occupied Homes by County
+# barplot for occupied homes in NYC
 ggplot(filtered_regs, aes(x = Year, y = OCC_T, fill = Label)) +
   geom_bar(stat = "identity") +
-  labs(x = "Year", y = "Occupied Count", title = "Number of Occupied Homes per Year by County") +
+  
+  geom_text(
+    aes(
+      label = paste0(round(Percent_Occ, 1), "%"),
+      y = Bar_Midpoint_Occ
+    ),
+    size = 4, fontface = "bold", color = "white"
+  ) +
+  
+  labs(x = "", y = "Occupied Homes Count", title = "Number of Occupied Homes per Year by County") +
   theme_minimal() +
   theme(
     plot.background = element_rect(fill = "gray95"),
     panel.background = element_rect(fill = "gray95", color = NA),
-    plot.title = element_text(hjust = 0.5, size = 14, face = "bold"), 
-    scale_fill_brewer(palette = "Set2")) +
-  scale_y_continuous(labels = scales::comma) +
-  scale_x_continuous(breaks = seq(min(regs$Year), max(regs$Year), by = 1))
-
-
-# Vehicle Registrations by County
-ggplot(regs_tidy_filtered, aes(x = Year, y = Value, fill = Label)) +
-  geom_bar(stat = "identity") +  # stat="identity" tells ggplot to use the actual data
-  labs(
-    title = "Vehicle Registrations by County",
-    x = "Year",
-    y = "Registrations",
-    fill = "County"
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold")
   ) +
-  theme_minimal() +
-  scale_y_continuous(labels = comma) +
-  theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
-  )
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_continuous(breaks = seq(min(filtered_regs$Year), max(filtered_regs$Year), by = 1))
 
+
+# Vehicle Registration by County Plot
+ggplot(filtered_regs, aes(x = Year, y = V_Ct, fill = Label)) +
+  geom_bar(stat = "identity") +
+  
+  # # Add percentage labels
+  # geom_text(
+  #   aes(
+  #     label = paste0(round(Percent_Veh, 1), "%"),
+  #     y = Bar_Midpoint_Veh
+  #   ),
+  #   size = 4, fontface = "bold", color = "white"
+  # ) +
+  
+  labs(x = "", y = "Vehicle Registrations Count", title = "Vehicle Registrations by County") +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "gray95"),
+    panel.background = element_rect(fill = "gray95", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold")
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_continuous(breaks = seq(min(filtered_regs$Year), max(filtered_regs$Year), by = 1))
 
 
 # pivot registration table
@@ -151,81 +177,161 @@ regs_tidy <- regs_pivot |>
   ) |>
   mutate(Year = as.numeric(Year))  # Ensure Year is numeric for plotting
 
-
-# Filter for the counties of interest and reshape the data for plotting
-regs_tidy_filtered <- regs_tidy |>
-  filter(Label %in% c("BRONX", "KINGS", "NEW YORK", "QUEENS"))
-
-
-# Get registration peak and valley for each borough
-regs_high_low <- regs_tidy_filtered |>
-  group_by(Label) |>
-  summarize(
-    High_Year = Year[which.max(Value)],
-    High_Value = max(Value),
-    Low_Year = Year[which.min(Value)],
-    Low_Value = min(Value)
+regs_tidy_filtered <- regs_tidy_filtered %>%
+  group_by(Year) %>%
+  arrange(Label, .by_group = TRUE) %>%  # Ensure proper ordering
+  mutate(
+    Cumulative_Value = cumsum(Value),  # Cumulative value for stacking
+    Bar_Midpoint = lag(Cumulative_Value, default = 0) + (Value / 2),  # Midpoint for each bar section
+    Percent_Value = Value / sum(Value) * 100  # Percentage of total
   )
 
 
-# Merge high and low points back into the tidy dataset for annotations
-regs_tidy_filtered <- regs_tidy_filtered |>
-  left_join(regs_high_low, by = "Label")
+ggplot(regs_tidy_filtered, aes(x = Year, y = Value, fill = Label)) +
+  geom_bar(stat = "identity") +
+  
+  geom_text(
+    aes(
+      label = paste0(round(Percent_Value, 1), "%"),
+      y = Bar_Midpoint
+    ),
+    size = 4, fontface = "bold", color = "white"
+  ) +
+  
+  labs(x = "", y = "Vehicle Registrations Count", title = "Vehicle Registrations by County") +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "gray95"),
+    panel.background = element_rect(fill = "gray95", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold")
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_continuous(breaks = seq(min(regs_tidy_filtered$Year), max(regs_tidy_filtered$Year), by = 1))
 
-# making a quick linear model to try and find the
-# line of best fit for registrations
-lm_model <- lm(Value ~ Year, data = regs_tidy_filtered)
-slope <- coef(lm_model)["Year"]
-intercept <- coef(lm_model)["(Intercept)"]
 
-# Create a formatted trendline equation
-trend_eq <- paste0("TREND: y = ", round(slope, 2), "x + ", round(intercept, 2))
 
-# Calculate Pearson correlation
-correlation <- cor(regs_tidy_filtered$Year, regs_tidy_filtered$Value)
-cor_label <- paste0("TREND: ", round(correlation, 2))
 
-# Plot with correlation in the legend
+
+# Plot with corrected percentage placement
+ggplot(regs_tidy_filtered, aes(x = Year, y = Value, fill = Label)) +
+  geom_bar(stat = "identity") +
+  
+  # Add percentages centered in their respective bar sections
+  geom_text(
+    aes(
+      label = paste0(round(Percent_Value, 1), "%"),
+      y = Bar_Midpoint  # Use corrected midpoint for text placement
+    ),
+    size = 4, fontface = "bold", color = "white"
+  ) +
+  
+  labs(
+    title = "Vehicle Registrations by County",
+    x = "",
+    y = "Vehicle Registrations Count",
+    fill = "County"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "gray95"),
+    panel.background = element_rect(fill = "gray95", color = NA),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold")
+  ) +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_continuous(labels = scales::comma) +
+  scale_x_continuous(breaks = seq(min(regs_tidy_filtered$Year), max(regs_tidy_filtered$Year), by = 1))
+
+
+
+#####################
+# Calculate CAGR for each county
+cagr_df <- regs_tidy_filtered %>%
+  group_by(Label) %>%
+  summarize(
+    Starting_Value = Value[Year == 2017],
+    Ending_Value = Value[Year == 2023],
+    CAGR = ((Ending_Value / Starting_Value)^(1 / (2023 - 2017)) - 1) * 100  # Convert to percentage
+  )
+
+# Calculate the average CAGR across counties
+average_cagr <- mean(cagr_df$CAGR, na.rm = TRUE) / 100  # Convert to decimal form
+
+# Calculate the midpoint value for 2017
+midpoint_2017 <- regs_tidy_filtered %>%
+  filter(Year == 2017) %>%
+  summarize(Midpoint = mean(Value, na.rm = TRUE)) %>%
+  pull(Midpoint)
+
+# Generate the growth line using the calculated average CAGR
+growth_line <- data.frame(
+  Year = seq(2017, 2023, by = 1),
+  Value = midpoint_2017 * (1 + average_cagr)^(seq(0, 6))  # Compound growth
+)
+
+# Plot the data with the growth line
 ggplot(regs_tidy_filtered, aes(x = Year, y = Value, color = Label, group = Label)) +
   geom_line(size = 1) +
   geom_point() +
   
   # Highlight high and low points
-  geom_point(aes(x = High_Year, y = High_Value), color = "#00BFC4", size = 3, shape = 17) +
+  geom_point(aes(x = High_Year, y = High_Value), color = "darkgreen", size = 3, shape = 17) +
   geom_text(aes(x = High_Year, y = High_Value, label = paste0("High: ", comma(High_Value))), 
-            vjust = -1, color = "#00BFC4", size = 3) +
-  geom_point(aes(x = Low_Year, y = Low_Value), color = "#F8766D", size = 3, shape = 17) +
+            vjust = -1, color = "darkgreen", size = 3) +
+  geom_point(aes(x = Low_Year, y = Low_Value), color = "darkred", size = 3, shape = 17) +
   geom_text(aes(x = Low_Year, y = Low_Value, label = paste0("Low: ", comma(Low_Value))), 
-            vjust = 1.5, color = "#F8766D", size = 3) +
+            vjust = 1.5, color = "darkred", size = 3) +
   
-  # Add a linear regression trendline (overall trend)
-  geom_smooth(method = "lm", se = FALSE, aes(group = 1, color = cor_label), 
-              linetype = "dashed", size = 1) +
-  
-  # Add the correlation call-out near the trendline
-  annotate("text", 
-           x = 2020.25, 
-           y = predict(lm_model, newdata = data.frame(Year = 2021)) + 10000, 
-           label = paste0("r = ", round(correlation, 2)), 
-           color = "black", 
-           size = 4) +
-  
-  labs(
-    x = "Year",
-    y = "Registered Vehicles in NYC",
-    color = "County/State"
+  # Add the growth line
+  geom_line(
+    data = growth_line,
+    aes(x = Year, y = Value, linetype = "YoY Trendline"), 
+    color = "darkblue", size = 1, inherit.aes = FALSE
   ) +
-  scale_y_continuous(labels = comma) +
+  
+  # Annotate the average CAGR
+  annotate(
+    "text",
+    x = 2020,
+    y = max(growth_line$Value) * 1.05,
+    label = paste0("Trendline: ", round(average_cagr * 100, 2), "%"),
+    color = "darkblue",
+    size = 5,
+    fontface = "bold"
+  ) +
+  
+  # Plot labels and theming
+  labs(x = "",
+    y = "Registered Vehicles",
+    color = "County",
+    linetype = "",
+    title = "Vehicle Registrations in NYC\n2017 - 2023"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
   scale_x_continuous(breaks = seq(2017, 2023, by = 1)) +
   coord_cartesian(clip = "off") +
   theme_minimal() +
-  theme(plot.background = element_rect(fill = "gray85"),
-        panel.background = element_rect(fill = "gray85", color = NA),
-        axis.text.x = element_text(angle = 45, hjust = 1),
-        plot.margin = margin(10, 10, 10, 10)
+  theme(
+    plot.background = element_rect(fill = "gray85"),
+    panel.background = element_rect(fill = "gray85", color = NA),
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.margin = margin(10, 10, 10, 10),
+    plot.title = element_text(hjust = 0.5, size = 14, face = "bold")
   ) +
-  ggtitle("Vehicle Registrations Over Time") +
-  theme(plot.title = element_text(hjust = 0.5))
+  scale_linetype_manual(
+    values = c("YoY Trendline" = "dashed"),
+    labels = c("YoY Trendline")
+  )
+
+
+
+
+
+
+
+
+
+
 
 ##############################
 # Produce Ridership v Revenue chart
@@ -234,43 +340,112 @@ df <- readxl::read_xlsx("Data/ridership_costs_summary_stats.xlsx")
 
 df$Avg_Age_Iss_DL
 
+df
+
+
 ggplot(df, aes(x = Year)) +
+  # Line for Yearly Subway Ridership
+  geom_line(aes(y = Yearly_Subway_Ridership / 1e9, color = "Subway Ridership"), size = 1) +
+  geom_point(aes(y = Yearly_Subway_Ridership / 1e9), color = "darkblue", size = 2) +
+  
+  # Yearly Revenue
+  geom_line(aes(y = MTA_Subway_Total_Revenue / 1e9, color = "Revenue"), size = 1) +
+  geom_point(aes(y = MTA_Subway_Total_Revenue / 1e9), color = "darkgreen", size = 2) +
+  
+  # Expenses
+  geom_line(aes(y = (MTA_Subway_Total_Expenses * -1) / 1e9, color = "Expenses"), size = 1) +
+  geom_point(aes(y = (MTA_Subway_Total_Expenses * -1) / 1e9), color = "black", size = 2) +
+  
+  # Revenue Less Expenses
   geom_line(aes(y = Revenue_Less_Expenses / 1e9, color = "Revenue Less Expenses"), size = 1) +
-  geom_line(aes(y = Yearly_Subway_Ridership / 1e9, color = "Yearly Subway Ridership"), size = 1) +
+  geom_point(aes(y = Revenue_Less_Expenses / 1e9), color = "#d35400", size = 2) +
+  
+  # X-axis adjustments
   scale_x_continuous(
     breaks = seq(2017, 2023, 1),
-    limits = c(2016.5, 2023.5) 
+    limits = c(2016.5, 2023.5)
   ) +
+  
+  # Y-axis adjustments
   scale_y_continuous(
-    name = "Revenue Less Expenses (Billions)",
+    name = "",  # Remove left axis title
     labels = label_number(suffix = "B", accuracy = 0.1),
-    sec.axis = sec_axis(~ . * 1, name = "Yearly Subway Ridership (Billions)", labels = label_number(suffix = "B", accuracy = 0.1))
+    sec.axis = sec_axis(~ . * 1, labels = label_number(suffix = "B", accuracy = 0.1))
   ) +
+  
+  # Vertical dashed lines
   geom_vline(xintercept = c(2017, 2020, 2023), linetype = "dashed", color = "grey") +
-  geom_text(data = df[df$Year %in% c(2017, 2020, 2023), ],
-            aes(y = Revenue_Less_Expenses / 1e9, label = scales::dollar(Revenue_Less_Expenses, scale = 1e-9, suffix = "B")),
-            color = "#F8766D", hjust = -0.2, vjust = -0.5, size = 3.5) +
+  
+  # Horizontal line at y = 0 (not in legend)
+  geom_hline(yintercept = 0, color = "black", size = 0.5) +
+  
+  # Annotations for Yearly Subway Ridership
   geom_text(data = df[df$Year %in% c(2017, 2020, 2023), ],
             aes(y = Yearly_Subway_Ridership / 1e9, label = paste0(round(Yearly_Subway_Ridership / 1e9, 1), "B")),
-            color = "#00BFC4", hjust = -0.2, vjust = 1.5, size = 3.5) +
+            color = "darkblue", hjust = -0.2, vjust = 1.5, size = 3.5) +
+  
+  # Annotations for Revenue
+  geom_text(data = df[df$Year %in% c(2017, 2020, 2023), ],
+            aes(y = MTA_Subway_Total_Revenue / 1e9, label = scales::dollar(MTA_Subway_Total_Revenue, scale = 1e-9, prefix = "$", suffix = "B")),
+            color = "darkgreen", hjust = -0.2, vjust = -0.5, size = 3.5) +
+  
+  # Annotations for Expenses
+  geom_text(data = df[df$Year %in% c(2017, 2020, 2023), ],
+            aes(y = (MTA_Subway_Total_Expenses * -1) / 1e9, label = scales::dollar((MTA_Subway_Total_Expenses * -1), scale = 1e-9, prefix = "$", suffix = "B")),
+            color = "darkred", hjust = -0.2, vjust = -0.5, size = 3.5) +
+  
+  # Annotations for Revenue Less Expenses
+  geom_text(data = df[df$Year %in% c(2017, 2020, 2023), ],
+            aes(y = Revenue_Less_Expenses / 1e9, label = scales::dollar(Revenue_Less_Expenses, scale = 1e-9, prefix = "$", suffix = "B")),
+            color = "#d35400", hjust = -0.2, vjust = -0.5, size = 3.5) +
+  
+  # Titles and labels
   labs(
-    x = "Year",
+    x = "",  # Remove x-axis label
     color = "Legend",
-    title = "MTA Subway Ridership and Revenue:\n2017-2023"  
+    title = "MTA Subway Ridership and Revenue\n2017-2023"
   ) +
+  
+  # Theme adjustments
   theme_minimal() +
   theme(
-    plot.background = element_rect(fill = "gray95"),  
-    panel.background = element_rect(fill = "gray95", color = NA),  
+    plot.background = element_rect(fill = "gray85"),  
+    panel.background = element_rect(fill = "gray85", color = NA),  
     plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),  
-    axis.title.y = element_text(color = "#F8766D"),  
-    axis.title.y.right = element_text(color = "#00BFC4"),  
-    axis.text.y.left = element_text(angle = 45, hjust = 1)  
+    axis.title.y = element_text(color = "black"),  
+    axis.title.y.right = element_text(color = "black"),  
+    axis.text.y.left = element_text(angle = 45, hjust = 1),
+    axis.text.y.right = element_text(angle = 45),
+    panel.grid.major = element_line(color = "gray15", size = 0.25),
+    panel.grid.minor = element_line(color = "gray15", size = 0.25)
+  ) +
+  scale_x_continuous(
+    breaks = seq(2017, 2023, 1),  # Display breaks from 2017 to 2023
+    limits = c(2017, 2023)        # Restrict the axis to 2017–2023
+  ) +
+  scale_x_continuous(
+    breaks = seq(2017, 2023, 1),
+    limits = c(2017, 2023.5)  # Add padding to the upper limit
+  ) +
+  
+  # Explicit color mapping
+  scale_color_manual(
+    values = c(
+      "Subway Ridership" = "#00BFC4",
+      "Revenue" = "#52be80",
+      "Expenses" = "#943126",
+      "Revenue Less Expenses" = "#F8766D"  # Light orange
+    ),
+    breaks = c(  # Specify the order of the legend items
+      "Subway Ridership",
+      "Revenue",
+      "Expenses",
+      "Revenue Less Expenses"
+    )
   )
 
-
-ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
-  theme(plot.title = element_text(hjust = 0.5))
+# ggtitle("Use theme(plot.title = element_text(hjust = 0.5)) to center") +
+#   theme(plot.title = element_text(hjust = 0.5))
 
 ################## Bike Ridership Data
 bike_data <- read_csv("Data/Bicycle_Counts_20241106.csv")
@@ -290,7 +465,7 @@ yearly_counts <- bike_data_filtered |>
   summarize(total_counts = sum(counts, na.rm = TRUE))
 
 ggplot(yearly_counts, aes(x = year, y = total_counts)) +
-  geom_line(color = "blue", size = 1) +
+  geom_line(color = "#52be80", size = 1) +
   geom_point(color = "darkblue", size = 3) +
   scale_y_continuous(labels = scales::comma) +  # Format y-axis with commas
   labs(
@@ -299,4 +474,12 @@ ggplot(yearly_counts, aes(x = year, y = total_counts)) +
     x = "Year",
     y = "Total Bike Volume"
   ) +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    plot.background = element_rect(fill = "gray95"),  
+    panel.background = element_rect(fill = "gray95", color = NA),
+    plot.title = element_text(hjust = 0.5),
+    plot.subtitle = element_text(hjust = 0.5),
+    panel.grid.major = element_line(color = "black", size = 0.25),
+    panel.grid.minor = element_line(color = "black", size = 0.25)
+  )

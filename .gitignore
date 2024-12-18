@@ -1,3 +1,5 @@
 *.csv
 *.xlsx
 .Rproj.user
+
+/.quarto/
