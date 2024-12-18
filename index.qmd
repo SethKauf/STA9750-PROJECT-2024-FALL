@@ -8,21 +8,103 @@ jyml:
 
 The group at Metro Mindset consists of five New Yorkers who frequently use the MTA Subway system. 
 
+The MTA has been through it over the years, and especially with the COVID pandemic in 2020 where ridership plummeted.
 
+![](images/nyt_covid_ridership_decline.png)
+
+As concerned New Yorkers we ask, how is this Subway system we rely on doing?
 
 # Motivating Question
 
-
+Is the MTA NYC Subway overall better, worse, or about the same as they were pre-pandemic?
 
 
 # Three R's
 
+We researched three categories to analyze this question:
 
+*Ridership*:
+
+* How many commuters are on the MTA?
+
+* Are other forms of transit taking over?
+  * Cars
+  * Bikes
+
+* What's caused the current situation?
+  * Remote Work
+  * Tourism
+
+
+*Revenue*:
+
+* Is the MTA collecting revenues at or close to pre-pandemic levels?
+
+* How are transit phenomena impacting MTA revenues?
+  * Pre-pandemic: for hire vehicles
+  * Post-pandemic:  "work-from-home" phenomena
+
+
+*Reliability*
+
+* Has ADA accessibility across boroughs and stations increased since the pandemic?
+
+* Of the accessible subway stations, how many are fully accessible (i.e., equipped with all necessary ADA features such as elevators, ramps, tactile guides, etc.)?
+
+* Has Crime & Safety in the system increased or decreased?
 
 
 # Ridership
 
+## Ridership over time
 
+![](images/Ridership_and_Revenue_Graph.png)
+
+Looking at ridership over time, we see the sharp drop in ridership (and revenue) in 2020, which started at the outset of the COVID lockdowns in March 2020.
+
+Expenses is "inverted", it should be noted that when it says, for example, $-\$3.3B$, that means the expenses are \$3.3Billion for that year.
+
+Although ridership (and by extent, revenue) are growing and are projected to reach an under-19% difference from 2019's figures by 2028 per the *Office of the New York State Comptroller*, it still will have a way to go to recover to pre-pandemic levels of ridership. ![](images/OSC_Graph.png)
+
+It is interesting to note that home occupied homes have actually grown in this time period:
+
+![](images/occ_homes_per_year_by_county.png)
+
+So, while more units are becoming occupied in the city, Subway travel is still quite down.
+
+## Other modes of transit
+
+Because of this decline in ridership combined with an uptick in living here, we looked at how other forms of transit have done in NYC since COVID, specifically vehicle ownership and bike travel.
+
+The working theory going into this was "are people just driving or biking more?"
+
+During COVID, one of the many items to find their demand skyrocket were used cars.
+
+Here's a [news report from ABC 7 NY](https://abc7ny.com/used-cars-consumer-reports-pandemic-auto-sales-covid/8949214/?utm_source=chatgpt.com) at the time, for example.
+
+So, did the number of cars in NYC increase that much?
+
+![](images/vehicle_ownership.png)
+
+This graph shows that while yes, vehicle ownership did increase in at least 3 of the 4 boroughs of interest in this time frame, it's not a significant enough margin to really explain the dip in ridership on the Subway.
+
+The other form of transit reviewed was biking.
+
+According to one source ([NYC DOT on NYC Open Data](https://data.cityofnewyork.us/Transportation/Bicycle-Counts/uczf-rk3c/about_data)), biking seems to be down in the city, at least at the popularly monitored locations of the DOT.
+
+![](images/bike_ridership.png)
+
+## What else?
+
+Possible explanations for what might be causing the slow-return to pre-pandemic ridership levels could be due to the surge in remote-work and a sharp decline in tourism.
+
+We [found analysis](https://projects.thecity.nyc/hows-new-york-city-doing/index.html#subway-ridership) from a newspaper *The City* that seemed to reflect this thinking, though we'll be discussing remote-work further down as well.
+
+![Work From Home Rates in NYC](images/the_city_wfh_graph.png)
+
+![](images/the_city_tourism_graph.png)
+
+Ridership's slow recovery combined with the MTA's ever-growing expenses does show a somber tale for the MTA. Fortunately (as discussed below), through funding through projects such as The Capital Program, the MTA will remain funded and growing for the foreseeable future.
 
 # Revenue
 
@@ -46,3 +128,7 @@ Arrests for Offenses Described in Administrative Code 14-150(d) Occurring in Tra
 
 
 # Conclusion
+
+Overall, the MTA has been through some rough times.
+
+Ridership is steadily increasing but not at the level we'd hoped.

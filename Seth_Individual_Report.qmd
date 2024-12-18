@@ -14,10 +14,12 @@ Below are various code snippets that can be *unfolded* to follow along in an `R`
 Quickly about the DMV and U.S. Census Data:
 
 The data comes from two sources:
+
 * `vehicle_regs.csv` comes directly from the New York DMV through [Data.NY.GOV](data.ny.gov)
-** The specific place is the [Vehicle, Snowbile, and Boat Registrations](https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt/about_data) Dataset
-** This dataset is continuously updated, meaning the data you pull today will be different than what I initially pulled back in October.
-** This dataset contains as of writing 12.6M records.
+  * The specific place is the [Vehicle, Snowbile, and Boat Registrations](https://data.ny.gov/Transportation/Vehicle-Snowmobile-and-Boat-Registrations/w4pv-hbkt/about_data) Dataset
+  * This dataset is continuously updated, meaning the data you pull today will be different than what I initially pulled back in October.
+  * This dataset contains as of writing 12.6M records.
+
 * `Vehicle_Registrations_By_Boro.xlsx` was created by combining U.S. Census Data for Vehicle Ownership in NYC for each year into a single Excel file.
 
 
@@ -53,9 +55,6 @@ First a look at the problem: let's see how ridership and the MTA's revenue from 
 ```{r ridership-and-revenue_[2], echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: TRUE
 df <- readxl::read_xlsx("data/ridership_costs_summary_stats.xlsx")
-
-df$Avg_Age_Iss_DL
-
 
 ggplot(df, aes(x = Year)) +
   # plotting the different lines of ridership and $ in a way that pops out
@@ -121,8 +120,8 @@ ggplot(df, aes(x = Year)) +
   
   theme_minimal() +
   theme(
-    plot.background = element_rect(fill = "gray85"),  
-    panel.background = element_rect(fill = "gray85", color = NA),  
+    plot.background = element_rect(fill = "gray95"),  
+    panel.background = element_rect(fill = "gray95", color = NA),  
     plot.title = element_text(hjust = 0.5, size = 14, face = "bold"),  
     axis.text.y.left = element_text(angle = 45, hjust = 1),
     axis.text.y.right = element_text(angle = 45),
@@ -134,7 +133,7 @@ ggplot(df, aes(x = Year)) +
 
 That 2020 dip has hurt a lot. Ridership is still quite low compared to pre-pandemic. The *Office of the NY State Comptroller* [estimates that it will eventually return to pre-pandemic levels](https://www.osc.ny.gov/files/reports/osdc/pdf/report-17-2025.pdf), but that won't happen for quite sometime.
 
-![](images/OSC_Graph)
+![](images/OSC_Graph.png)
 
 With this in mind, let's look at how other forms of transit that could've overtaken the Subways are going.
 
@@ -232,7 +231,9 @@ ggplot(car_registration_plot_data, aes(x = year, y = registration_count, color =
     y = "Count of Vehicle Registrations"
   ) +
   theme_minimal() +
-  theme(legend.title = element_blank())
+  theme(legend.title = element_blank(),
+        plot.background = element_rect(fill = "gray95"),
+        panel.background = element_rect(fill = "gray95", color = NA))
 ```
 
 A major problem with this data was that it updates and removes old registrations.
@@ -270,7 +271,7 @@ ggplot(filtered_regs, aes(x = Year, y = OCC_T, fill = Label)) +
 Reading in the U.S. Census Data, first we can see how home occupancies have grown in NYC over the past few years.
 
 ```{r pivoting-and-filtering_[6], echo=TRUE, message=FALSE, warning=FALSE}
-#| cold-fold: TRUE
+#| code-fold: TRUE
 # pivot registration table
 # make the year the columns and county the Label/Index
 regs_pivot <- regs |>
@@ -325,7 +326,9 @@ ggplot(regs_tidy_filtered, aes(x = Year, y = Value, fill = Label)) +
   theme_minimal() +
   scale_y_continuous(labels = comma) +
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1)
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    plot.background = element_rect(fill = "gray95"),
+    panel.background = element_rect(fill = "gray95", color = NA)
   )
 ```
 
@@ -387,8 +390,8 @@ ggplot(regs_tidy_filtered, aes(x = Year, y = Value, color = Label, group = Label
   coord_cartesian(clip = "off") +
   theme_minimal() +
   theme(
-    plot.background = element_rect(fill = "gray85"),
-    panel.background = element_rect(fill = "gray85", color = NA),
+    plot.background = element_rect(fill = "gray95"),
+    panel.background = element_rect(fill = "gray95", color = NA),
     axis.text.x = element_text(angle = 45, hjust = 1),
     plot.margin = margin(10, 10, 10, 10)
   ) +
@@ -430,8 +433,8 @@ ggplot(yearly_counts, aes(x = year, y = total_counts)) +
   ) +
   theme_minimal() +
   theme(
-    plot.background = element_rect(fill = "gray85"),
-    panel.background = element_rect(fill = "gray85", color = NA)
+    plot.background = element_rect(fill = "gray95"),
+    panel.background = element_rect(fill = "gray95", color = NA)
   )
 
 ```
