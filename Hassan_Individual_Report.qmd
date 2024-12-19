@@ -1,6 +1,6 @@
 ---
-title: "FINAL INDIVIDUAL REPORT: SLYASTROLOGER"
-author: "Hassan Adolphus"
+title: "MTA/Rideshare Revenue Analysis"
+author: "by Hassan Adolphus"
 editor: visual
 code-fold: true
 ---
@@ -29,6 +29,7 @@ To begin my analysis, I need to load the necessary packages to manipulate the da
 # Install and load the necessary packages
 library(readr)
 library(dplyr)
+library(scales)
 library(tidyr)
 library(lubridate)
 library(ggplot2)
@@ -69,6 +70,7 @@ ggplot(mtafarerevenue2019to2024, aes(x = Month, y = Fare_Revenue)) +
        x = "Month",
        y = "Fare Revenue") +
   theme_minimal() +
+  scale_y_continuous(labels = comma) +
   scale_x_date(date_labels = "%b %Y", date_breaks = "6 months") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
@@ -136,6 +138,7 @@ suppressWarnings(
          color = "Company") +
     theme_minimal() +
     scale_x_date(date_labels = "%b %Y", date_breaks = "6 months") +
+    scale_y_continuous(labels = comma) +
     scale_color_manual(values = c("UBER" = "black", "LYFT" = "pink")) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 )

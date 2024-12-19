@@ -226,8 +226,21 @@ borough_arrests <- merged_complaints |>
   group_by(Borough, Period) |>
   summarise(Total_Arrests = sum(Complaints, na.rm = TRUE), .groups = "drop")
 
+borough_summary <- borough_complaints |>
+  left_join(borough_arrests, by = c("Borough", "Period")) |>
+  mutate(
+    Arrest_to_Complaint_Ratio = ifelse(Total_Complaints > 0, Total_Arrests / Total_Complaints, NA)
+  ) |>
+  filter(!is.na(Arrest_to_Complaint_Ratio))
+
 # Set the order of the Period factor
-borough_summary <- borough_arrests |>
+borough_summary <- borough_summary |>
+  mutate(
+    Period = factor(Period, levels = c("Pre COVID", "During COVID", "Post COVID"))
+  )
+
+# Set the order of the Period factor
+borough_summary <- borough_summary |>
   mutate(
     Period = factor(Period, levels = c("Pre COVID", "During COVID", "Post COVID"))
   )
@@ -242,7 +255,7 @@ The above code combines the complaint and arrest data to include borough informa
 From the graph, it is clear the Bronx consistently has high arrest-to-complaint rates suggesting stronger enforcement or higher arrest rates relative to complaints during and post-COVID-19.Our findings align with trends discussed in a Biomedcentral article, which reported significant increases in complaints during COVID-19, particularly for assault and harassment. However, our results add granularity by showing how arrest-to-complaint rates varied by borough and over time.
 
 ```{r summary-plot_[6], message=FALSE, warning=FALSE, echo=FALSE}
-#| eval: false
+
 ggplot(borough_summary, aes(x = reorder(Borough, -Arrest_to_Complaint_Ratio), 
                             y = Arrest_to_Complaint_Ratio, fill = Period)) +
   geom_bar(stat = "identity", position = "dodge") +

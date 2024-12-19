@@ -126,8 +126,33 @@ Ridership's slow recovery combined with the MTA's ever-growing expenses does sho
 
 # Revenue
 
+How has the MTA's Fare-Revenue changed?
+
+<div class="center-image">
+  ![MTA Fare Revenue 2019 - 2024](images/mta_monthly_fare_revenue.jpeg)
+</div>
 
 ## Revenue Change Over Time
+
+The MTA's revenue, which relies heavily on Subway and Bus fares, took a significant hit during the COVID-19 pandemic. As ridership plummeted, the MTA's monthly fare revenue saw a sharp drop starting in March 2020, as evidenced by the sharp drop in revenue in the graph above . However, as also shown in the graph above, since March 2021 the MTA’s fare revenue has been slowly but steadily recovering. Despite this gradual improvement, we can also see that fare revenue has yet to return to pre-pandemic levels. This slow recovery raises questions about two potential hindering factors: the impact of increased use of for-hire vehicle services and the ongoing trend of "work from home," which may be limiting the return of daily commuters – and thus fare revenue – to the MTA’s.
+
+### Have For Hire Vehicles (FHVs) Affected the MTA’s Fare Revenue?
+
+<div class="center-image">
+  ![Rideshare Revenue 2017 - 2024](images/rideshare_monthly_revenue.jpeg)
+</div>
+
+As demonstrated by the graph above, before 2020, For-Hire Vehicle (FHV) revenues in New York City were on a rapid, consistent growth trajectory, reflecting an increasing demand for ride-sharing services. However, with the onset of the COVID-19 pandemic, FHV revenues saw a sharp decline as citywide movement slowed and demand for rides dropped significantly.
+
+We can also see that since then, FHV revenues have steadily increased each month since about February 2021, showing signs of recovery. However, this rebound has been slower than the pre-pandemic growth rate, and revenues have yet to return to their pre-pandemic peak. 
+
+An interesting trend to note is that FHV revenue mirrors similar fluctuations in the MTA's fare data, suggesting a correlation between the two. While it is unlikely they directly affect one another, the recovery patterns of both sectors appear to be interconnected. When analyzed together, FHV revenues and MTA fare revenue data may better serve as valuable indicators of overall movement and transportation activity within NYC, rather than dependent factors. 
+
+### How is Remote Work Affecting the MTA’s Fare Revenue?
+
+While hard data on the exact number of NYC workers or the percentage working from home remains unavailable, the MTA has provided literature linking the "work-from-home" trend to subway ridership in 2023, which is a key factor in estimating fare revenue. According to the MTA, the pandemic has significantly shifted ridership dynamics, with discretionary travel—such as leisure trips or non-work-related travel—becoming more common, while traditional commuter travel has declined. One major contributor to this shift is the rise of telecommuting and remote work, which has reduced the frequency of the traditional five-day commute to the office. 
+
+Furthermore, as a result of increasing remote work policies, commuting patterns have changed: ridership is now highest on Tuesdays, Wednesdays, and Thursdays, reflecting the reduced need for travel earlier in the week and later in the week. Additionally, weekend subway ridership has shown a stronger recovery, with about 77% of pre-pandemic levels, compared to only 66% on weekdays. These changes highlight how the work-from-home trend has reshaped transit behavior, contributing to a slow and uneven recovery of fare revenue for the MTA, which continues to grapple with shifting commuter habits in the post-pandemic era.
 
 
 ## Other System Comparison
@@ -142,8 +167,31 @@ Visual tools, like time series charts, correlation matrices, and distribution pl
 
 # Reliability
 
+How has the MTA as a system fared over the past few years?
 
 ## Accessibility
+
+To explore these pre-COVID concerns, we analyzed the MTA Customer Feedback Data: 2014–2019, filtering the dataset to focus on subway complaints from 2017, 2018, and 2019. I was unable to find a dataset that aligned with my vision for the analysis, so I had to manually clean the complaints data before uploading. Despite this limitation, the stacked bar chart highlighted the ongoing trend of elevator-related complaints across 2017, 2018, and 2019. This analysis revealed the accessibility challenges faced by commuters before the pandemic. During the pandemic, a historic agreement in 2020 allocated $5.2 billion from the 2020–2024 Capital Program for accessibility upgrades. According to the 2022 MTA press release, “ICYMI: Governor Hochul Announces MTA and Accessibility Advocates Agree on Historic Plan for Expanding Accessibility in the New York City Subway System”, this funding would make 81 stations accessible by 2025, 85 more by 2035, another 90 by 2045, and the final 90 by 2055.
+
+To evaluate accessibility progress, we used the NYC Open Data set, "MTA Subway Stations Map", to create a map of subway lines based on accessibility. For consistency, Staten Island stations were excluded.
+
+<div class="center-image">
+  ![Subways with ADA Compliance in NYC excl. Staten Island](images/NYC_Subway_ADA_Map_Excluding_Staten_Island.png)
+</div>
+
+In this dataset, accessibility is represented as follows:
+
+<div class="center-image">
+  ![](images/ada_data.png)
+</div>
+
+* 0: Not accessible
+
+* 1: Fully accessible
+
+* 2: Partially accessible (usually accessible in only one direction)
+
+Our findings revealed that of the 472 subway stations in New York City, only 138 are fully accessible. This highlights that, despite the MTA’s progress in enhancing accessibility, significant work remains to meet the Capital Programs deadlines.
 
 
 ## Crime & Safety 
@@ -153,6 +201,18 @@ Arrests for Offenses Described in Administrative Code 14-150(d) Occurring in Tra
 
 # Conclusion
 
-Overall, the MTA has been through some rough times.
+Overall, the MTA has been through some rough times in recent years, though there is space for optimism.
 
-Ridership is steadily increasing but not at the level we'd hoped.
+Ridership is steadily increasing but not at the level we'd hoped, however it is expected to recover to pre-pandemic levels in the coming years.
+
+In the aftermath of the pandemic, the MTA’s fare revenues have yet to recover from their drop off due to COVID. This can most likely be attributed to, in part, an increase in remote work, which has driven down ridership and thus fare revenues for the MTA.
+
+Reliability ...
+
+Accessibility ...
+
+It is clear that MTA subway safety is worse compared to pre-pandemic. It is unclear to expect any sort of recovery any time soon in the upcoming years.
+
+In general, although a lot remains to be seen, the already-struggling MTA took a massive hit in 2020 and its road to recovery seems long and fraught with challenges.
+
+Fortunately there is a lot of buy-in by both the public and various government entities to improve the system over the coming years (ie the Capital Project).
