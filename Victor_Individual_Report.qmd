@@ -1,0 +1,291 @@
+---
+title: Victor Individual Report
+format: html
+editor: visual
+css: styles.css
+---
+
+# Introduction
+
+Final Project : Analysis on MTA Crime Data - Is the MTA NYC Subway overall better, worse, or about the same as they were pre-pandemic?
+
+We will be using the following crime data sources from [here](https://www.nyc.gov/site/nypd/stats/reports-analysis/transit-bus.page). For the purpose of this project, we will only be focusing on Arrests for Offenses Described in Administrative Code 14-150(d) Occurring in Transit Jurisdiction limited to MTA Subway within NYC(excluding Staten Island). The data time frame is from 2017-2024 giving a fair frame to compare data from pre-Covid and post-Covid.
+
+However, Precinct sectors do not mean anything because the average person does not know the location behind all the precincts. As a result, I created a file named Precinct Location by locating the area [here](https://www.nyc.gov/site/nypd/bureaus/patrol/precincts-landing.page). I am able to then aggregate the area by boroughs to compare where arrests and complaints are reported.
+
+# Data Cleaning
+
+Here is a snippet of the original data format:
+
+The issues:
+
+-   There is no date format
+
+-   The crime types are under each Precinct
+
+-   I need Transit District and Precinct in their own separate columns
+
+After running the following code:
+
+```{python, python.reticulate = FALSE}
+#| eval: false
+#Python Code to transpose data
+
+import pandas as pd
+import csv
+import requests
+import os
+
+class Parse:
+    def __init__(self):
+        self.code = 0
+        self.district = None 
+
+    def parse(self, line, time):
+        if len(line) < 2 or line[0] == '' or 'total' in line[0].lower():
+            return
+        if line[0].split(' ')[0].isdigit():
+            self.code = int(line[0].split(' ')[0])
+            return
+        if 'transit district' in line[0].lower() and line[0].split(' ')[-1].isdigit():
+            self.district = line[0]
+            return
+        if line[1].rstrip('.0').isdigit():
+            if self.district is not None:
+                return [time, self.district, self.code, line[0], line[1]]
+            return [time, '', self.code, line[0], line[1]]
+        return None
+
+if __name__ == "__main__":
+    month = 1
+    year = 2017
+
+    output_file = open('output.csv', 'w', newline='')
+    output_file_writer = csv.writer(output_file)
+    title = ['Date', 'District', 'Precint', 'Name', 'Arrests']
+    # title = ['Date', 'Precint', 'Name', 'Arrests']
+    output_file_writer.writerow(title)
+
+    while not (month == 7 and year == 2024):
+        file_month_year = f"{month:02}-{year}"
+        parser = Parse()
+        if not os.path.isfile(file_month_year+'.xlsx'):
+            dls = 'https://www.nyc.gov/assets/nypd/downloads/excel/analysis_and_planning/transit-bus-crime-reports/'+str(year)+'/complaints-in-transit-report-'
+
+            match month, year:
+                case 10, 2022:
+                    dls = dls+'oct-'+str(year)+'.xlsx'
+                case 11, 2022:
+                    dls = dls+'nov-'+str(year)+'.xlsx'
+                case 12, 2022:
+                    dls = dls+'dec-'+str(year)+'.xlsx'
+                case _:
+                    dls = dls+file_month_year+'.xlsx'
+
+            resp = requests.get(dls)
+            with open(file_month_year+'.xlsx', 'wb') as output:
+                output.write(resp.content)
+            output.close()
+            table = pd.read_excel(file_month_year+'.xlsx')
+            table.to_csv(file_month_year+'.csv', index = None, header=True) 
+
+        with open(file_month_year+'.csv', mode = 'r') as file:
+            csvFile = csv.reader(file)
+            for line in csvFile:
+                data = parser.parse(line, file_month_year)
+                if data is not None:
+                    output_file_writer.writerow(data)
+        file.close()
+        
+        month+=1
+        if(month > 12):
+            month%=12
+            year+=1
+
+    output_file.close()
+```
+
+### Loading the Data
+
+The following code will load the necessary packages needed to answer the our primary question: Is the MTA NYC Subway overall better, worse, or about the same as they were pre-pandemic. The code will pull up the output csv file created earlier from the python file.
+
+```{r libraries_[1], message=FALSE, warning=FALSE, echo=FALSE}
+
+# Install and load required packages
+if (!require("dplyr")) install.packages("dplyr")
+if (!require("tidyverse")) install.packages("tidyverse")
+if (!require("ggplot2")) install.packages("ggplot2")
+if (!require("stringr")) install.packages("stringr")
+if (!require("lubridate")) install.packages("lubridate")
+
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(stringr)
+library(lubridate)
+
+# Check if the file exists
+if (!file.exists("output.csv")) {
+  stop("File does not exist in the current directory.")
+}
+
+# Assign the CSV files
+Crimes <- read_csv("data/crimes_output.csv")
+Precinct_Location <- read_csv("data/Precinct_Location.csv")
+Complaint <- read_csv("data/complaint.csv")
+```
+
+------------------------------------------------------------------------
+
+### Complaint Data - Data Wrangling
+
+Since we are determining data from different time periods it would make sense to categorize by adding in a Period column that aggregates data into "Pre Covid", "During Covid" or "Post Covid". In our project Pre Covid will be data from Jan 1st, 2017 to Feb 29th, 2020. During Covid will be data from March 1st, 2020 to June 30th, 2021. Finally, Post Covid will be data from July 1st, 2021 to present time. The code also reformat the date into Month/Day/Year.
+
+```{r complaint-df_[2], message=FALSE, warning=FALSE, echo=FALSE}
+
+# Reformat the 'Date' column and add the 'Period' column
+Complaint <- Complaint |>
+  mutate(
+    Date = mdy(Date),
+    # Categorize 'Period' based on the date
+    Period = case_when(
+      Date >= as.Date("2017-01-01") & Date <= as.Date("2020-02-29") ~ "Pre COVID",
+      Date >= as.Date("2020-03-01") & Date <= as.Date("2021-06-30") ~ "During COVID",
+      Date >= as.Date("2021-07-01") ~ "Post COVID",
+      TRUE ~ NA_character_
+    )
+  )
+
+# View snippet of data
+print(head(Complaint))
+```
+
+------------------------------------------------------------------------
+
+### Complaint Data - Merging Data
+
+By merging the data we are able to see the complaints by boroughs. We are able to identify which areas are reeving more complaints and which areas are receiving less complaints. As a result, we can see which areas are over saturated or unsaturated in law enforcement.
+
+```{r merged-boros_[3], message=FALSE, warning=FALSE, echo=FALSE}
+
+# Merged complaint data with precinct location based on 'Precinct' column
+merged_boroughs <- Complaint |>
+  left_join(Precinct_Location, by = "Precinct")
+
+# Filter NA values
+merged_data <- merged_boroughs |>
+  filter(!is.na(Borough))
+
+# Snippet of merged data 
+print(head(merged_data))
+```
+
+The following code displays a table showing the total number of complaints reported in NYC boroughs with the exception of Staten Island across the three time periods. The data highlights changes in complaint volumes over time.
+
+```{r boro-complaints_[4], message=FALSE, warning=FALSE, echo=FALSE}
+
+borough_complaints_by_period <- merged_data |>
+  filter(!is.na(Borough) & !is.na(Period) & !is.na(Complaints)) |>
+  group_by(Borough, Period) |>
+  summarise(Total_Complaints = sum(Complaints, na.rm = TRUE), .groups = "drop") |>
+  arrange(Borough, Period)
+
+# View Complaints in Boroughs by Time period
+print(borough_complaints_by_period)
+```
+
+Now that we all the total complaints for each boroughs in different time period, it wouldn't be fair to judge only by complaints. There are many variables that may affect our primary goal such as false reports and banter complaints. To create a successful metric that determines whether Pre-Covid was safer than Post-Covid we used Arrest to Complaint Ratio. The formula to reach this metric will be:
+
+-   Arrest / Complaints = Arrest-to-Complaint (Very Simple!)
+
+```{r boro-summaries_[5], message=FALSE, warning=FALSE, echo=FALSE}
+
+merged_complaints <- Complaint |>
+  left_join(Precinct_Location, by = "Precinct") |>
+  filter(!is.na(Borough))
+
+# Summarize complaints and arrests by Borough and Period
+borough_complaints <- merged_complaints |>
+  filter(!is.na(Period)) |>
+  group_by(Borough, Period) |>
+  summarise(Total_Complaints = sum(Complaints, na.rm = TRUE), .groups = "drop")
+
+borough_arrests <- merged_complaints |>
+  filter(!is.na(Period)) |>
+  group_by(Borough, Period) |>
+  summarise(Total_Arrests = sum(Complaints, na.rm = TRUE), .groups = "drop")
+
+# Set the order of the Period factor
+borough_summary <- borough_arrests |>
+  mutate(
+    Period = factor(Period, levels = c("Pre COVID", "During COVID", "Post COVID"))
+  )
+```
+
+The above code combines the complaint and arrest data to include borough information. It then calculates the total number of complaints and arrests for each borough during different time periods and organizes the time periods in sequential order: "Pre COVID," "During COVID," and "Post COVID."
+
+------------------------------------------------------------------------
+
+### Arrest-to-Complaint Ratio by Borough and Period
+
+From the graph, it is clear the Bronx consistently has high arrest-to-complaint rates suggesting stronger enforcement or higher arrest rates relative to complaints during and post-COVID-19.Our findings align with trends discussed in a Biomedcentral article, which reported significant increases in complaints during COVID-19, particularly for assault and harassment. However, our results add granularity by showing how arrest-to-complaint rates varied by borough and over time.
+
+```{r summary-plot_[6], message=FALSE, warning=FALSE, echo=FALSE}
+#| eval: false
+ggplot(borough_summary, aes(x = reorder(Borough, -Arrest_to_Complaint_Ratio), 
+                            y = Arrest_to_Complaint_Ratio, fill = Period)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Arrest-to-Complaint Ratio by Borough and Period",
+    x = "Borough",
+    y = "Arrest-to-Complaint Ratio",
+    fill = "Period"
+  ) +
+  theme_minimal()
+```
+
+------------------------------------------------------------------------
+
+### Top 10 Precincts by Number of Complaints
+
+Precinct 14 and the 5 other precincts ranking in the top 10, suggests Manhattan may be a major hotspot for transit-related incidents. This complements findings from the literature, which noted a decrease in the proportion of arrests in Manhattan after the Subway Safety Plan, suggesting enforcement efforts may have shifted to other boroughs. 
+
+```{r top10_[7], message=FALSE, warning=FALSE, echo=FALSE}
+
+top_10_precincts <- merged_complaints |>
+  group_by(Precinct, Borough) |>
+  summarize(Total_Complaints = sum(Complaints), .groups = "drop") |>
+  arrange(desc(Total_Complaints)) |>
+  slice_head(n = 10)
+
+# Reorder precincts for plotting
+top_10_precincts <- top_10_precincts |>
+  mutate(Precinct = factor(Precinct, levels = top_10_precincts$Precinct))
+
+# Create the plot
+ggplot(top_10_precincts, aes(x = Precinct, y = Total_Complaints, fill = Borough)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Top 10 Precincts by Number of Complaints",
+    x = "Precinct",
+    y = "Total Complaints",
+    fill = "Borough" # Legend title
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1) # Rotate x-axis labels for readability
+  )+
+theme_minimal() +
+  theme(
+    panel.background = element_rect(fill = "grey90", color = NA), # Light gray background
+    panel.grid.major = element_line(color = "white"), # Grid lines for contrast
+    panel.grid.minor = element_blank(),              # Remove minor grid lines
+    axis.text.x = element_text(angle = 45, hjust = 1) # Rotate x-axis labels
+  )
+```
+
+------------------------------------------------------------------------
+
+# Conclusion for MTA Subway Safety
+
+It is clear that MTA subway safety is worse compared to pre-pandemic. Almost every borough, with the exception of Queens has seen an increase in crime rate. We observed a marked dip during early COVID-19, followed by a steady recovery and peak in 2024, indicating intensified enforcement efforts post-pandemic. Our analysis aligns with findings from the Subway Safety Plan, which reported an increase in harassment-related arrests.

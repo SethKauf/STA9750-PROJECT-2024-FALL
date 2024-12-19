@@ -1,0 +1,175 @@
+---
+title: "Group Project Section by Hugo Andrade"
+format: html
+editor: visual
+---
+
+### MTA System Analysis: Correlations and Visualizations
+
+The MTA (Metropolitan Transportation Authority) operates a vast network of subways, buses, commuter railroads, and other transit services. This analysis explores ridership trends and relationships between these services using correlation analysis and visualizations.
+
+#### **Correlation Analysis**
+
+Ridership metrics are grouped based on correlation strengths: - **High Correlation**: Subway, Metro-North Railroad, Long Island Rail Road, and NYCT Bus, showing similar ridership trends. - **Mid Correlation**: Services like Access-A-Ride, MTA Bus, and Bridges and Tunnels, with moderate connections. - **Low Correlation**: Staten Island Railway, reflecting more localized usage.
+
+#### **Visualizations**
+
+1.  **Time Series Charts**:
+    -   Highlight trends for high, mid, and low-correlated services, with recent data emphasized.
+2.  **Correlation Matrix**:
+    -   Displays pairwise relationships using a color-coded grid to identify ridership patterns.
+3.  **Distribution Plots**:
+    -   Show the variability and spread of ridership across all services.
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| results: hide
+
+if (!require("tidyr")) install.packages("tidyr")
+if (!require("ggplot2")) install.packages("ggplot2")
+if (!require("readxl")) install.packages("readxl")
+if (!require("dplyr")) install.packages("dplyr")
+if (!require("ggcorrplot")) install.packages("ggcorrplot")
+if (!require("scales")) install.packages("scales")
+if (!require("janitor")) install.packages("janitor")
+
+# Load required libraries
+library(tidyr)
+library(ggplot2)
+library(readxl)
+library(dplyr)
+library(ggcorrplot)
+library(scales)  # For formatting numbers
+
+# Load the data
+file_path <- "data/MTA_Agency_Wide_Data_For_R.xlsx"
+data <- read_excel(file_path)
+
+# Clean column names (if necessary)
+library(janitor)
+data <- data %>% clean_names()
+
+# Rename columns for better readability
+data <- data %>%
+  rename(
+    `Subway Ridership` = subway,
+    `Access-A-Ride (AAR)` = aar,
+    `Bridges and Tunnels (BT)` = bt,
+    `Long Island Rail Road (LIRR)` = lirr,
+    `Metro-North Railroad (MNR)` = mnr,
+    `MTA Bus` = mta_bus,
+    `NYCT Bus` = nyct_bus,
+    `Staten Island Railway (SIR)` = sir
+  )
+
+# Reshape data to long format for plotting
+data_long <- data %>%
+  pivot_longer(cols = -date, names_to = "Variable", values_to = "Value")
+
+# Get the most recent data points
+latest_data <- data_long %>%
+  group_by(Variable) %>%
+  filter(date == max(date)) %>%
+  ungroup()
+
+# Define correlation groups
+corr_matrix <- cor(data %>% select(-date), use = "complete.obs")
+high_corr <- c("Subway Ridership", "Metro-North Railroad (MNR)", "Long Island Rail Road (LIRR)", "NYCT Bus")
+mid_corr <- c("Access-A-Ride (AAR)", "MTA Bus", "Bridges and Tunnels (BT)")
+low_corr <- c("Staten Island Railway (SIR)")
+
+# High Correlation Plot
+high_data <- data_long %>% filter(Variable %in% high_corr)
+ggplot(high_data, aes(x = date, y = Value, color = Variable)) +
+  geom_line(size = 1) +
+  geom_point(data = latest_data %>% filter(Variable %in% high_corr), 
+             aes(x = date, y = Value), size = 3, color = "red") +
+  geom_text(
+    data = latest_data %>% filter(Variable %in% high_corr),
+    aes(label = scales::comma(Value), x = date, y = Value),
+    vjust = -0.5, size = 3.5
+  ) +
+  labs(
+    title = "High Correlation Variables",
+    x = "Date",
+    y = "Ridership",
+    color = "Variable"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal()
+
+# Mid Correlation Plot
+mid_data <- data_long %>% filter(Variable %in% mid_corr)
+ggplot(mid_data, aes(x = date, y = Value, color = Variable)) +
+  geom_line(size = 1) +
+  geom_point(data = latest_data %>% filter(Variable %in% mid_corr), 
+             aes(x = date, y = Value), size = 3, color = "red") +
+  geom_text(
+    data = latest_data %>% filter(Variable %in% mid_corr),
+    aes(label = scales::comma(Value), x = date, y = Value),
+    vjust = -0.5, size = 3.5
+  ) +
+  labs(
+    title = "Mid Correlation Variables",
+    x = "Date",
+    y = "Ridership",
+    color = "Variable"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal()
+
+# Low Correlation Plot
+low_data <- data_long %>% filter(Variable %in% low_corr)
+ggplot(low_data, aes(x = date, y = Value, color = Variable)) +
+  geom_line(size = 1) +
+  geom_point(data = latest_data %>% filter(Variable %in% low_corr), 
+             aes(x = date, y = Value), size = 3, color = "red") +
+  geom_text(
+    data = latest_data %>% filter(Variable %in% low_corr),
+    aes(label = scales::comma(Value), x = date, y = Value),
+    vjust = -0.5, size = 3.5
+  ) +
+  labs(
+    title = "Low Correlation Variables",
+    x = "Date",
+    y = "Ridership",
+    color = "Variable"
+  ) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal()
+
+# Correlation Matrix Plot
+ggcorrplot(
+  corr_matrix,
+  method = "circle",
+  type = "lower",
+  lab = TRUE,
+  colors = c("royalblue", "white", "orange"),
+  title = "Correlation Matrix (Diagonal Alignment)"
+) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Create distribution plots with bell curves, using facets for separate variables
+data_long %>%
+  ggplot(aes(x = Value)) +
+  geom_histogram(aes(y = ..density..), bins = 30, fill = "royalblue", color = "black") +
+  geom_density(color = "orange", size = 1) +
+  facet_wrap(~ Variable, scales = "free", ncol = 3) +
+  labs(
+    title = "Distributions of Variables with Bell Curves",
+    x = "Value",
+    y = "Density"
+  ) +
+  theme_minimal()
+
+
+```
+
+## Analysis of MTA Service Usage
+
+This chart shows how different MTA services, like buses, subways, and railroads, are used. Each blue bar represents the number of riders or users, while the orange curve overlays a bell-shaped pattern to show how the data would look if it followed a normal distribution. Some services, like the Subway and MTA Bus, have a wide range of usage, while others, like the Staten Island Railway, show more consistent numbers.
+
+These patterns help us understand how people use each transit service. For example, some services have clear peaks where usage is the highest, while others are more spread out. This information is useful for improving transit planning and ensuring resources are allocated effectively to meet demand.
