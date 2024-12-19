@@ -206,6 +206,7 @@ ggplot(combined_data, aes(x = Month)) +
     color = "Agency"
   ) +
   scale_color_manual(values = c("MTA Fare Revenue" = "blue", "UBER" = "black", "LYFT" = "pink")) +
+  scale_y_continuous(labels = comma) +
   theme_minimal() +
   theme(legend.position = "top")
 ```
