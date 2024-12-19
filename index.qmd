@@ -163,7 +163,29 @@ The Metropolitan Transportation Authority (MTA) operates a vast transit system t
   ![Correlation of the Subway's ridership with other systems](images/subway_reliability_corr_matrix.png)
 </div>
 
-Visual tools, like time series charts, correlation matrices, and distribution plots, make these patterns easy to understand. High-correlation services are integral to the MTA's core operations, while mid- and low-correlation services cater to specialized or localized needs. These insights can help the MTA plan resources better, ensuring the transit system is responsive to the diverse needs of its riders while improving overall efficiency. 
+Visual tools, like time series charts, correlation matrices, and distribution plots, make these patterns easy to understand.
+
+<div class="center-image" style="text-align: center;">
+![](images/systems_distributions.png)
+</div>
+
+High-correlation services are integral to the MTA's core operations:
+
+<div class="center-image" style="text-align: center;">
+![](images/systems_high_corr.png)
+</div>
+
+while mid- and low-correlation services cater to specialized or localized needs.
+
+<div class="center-image" style="text-align: center;">
+![](images/systems_med_corr.png)
+</div>
+
+These insights can help the MTA plan resources better, ensuring the transit system is responsive to the diverse needs of its riders while improving overall efficiency.
+
+<div class="center-image" style="text-align: center;">
+![](images/systems_low_corr.png)
+</div>
 
 # Reliability
 
