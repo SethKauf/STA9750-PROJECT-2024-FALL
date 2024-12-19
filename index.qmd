@@ -102,7 +102,7 @@ Possible explanations for what might be causing the slow-return to pre-pandemic 
 
 We [found analysis](https://projects.thecity.nyc/hows-new-york-city-doing/index.html#subway-ridership) from a newspaper *The City* that seemed to reflect this thinking, though we'll be discussing remote-work further down as well.
 
-![Work From Home Rates in NYC](images/the_city_wfh_graph.png)
+![Work From Home Rates in NYC per *The City*](images/the_city_wfh_graph.png)
 
 ![*The City*'s tourism rates based on hotel occupancies in NYC](images/the_city_tourism_graph.png)
 

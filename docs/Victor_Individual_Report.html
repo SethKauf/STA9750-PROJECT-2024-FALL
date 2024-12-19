@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Victor Individual Report – Metro Mindset</title>
+<title>Crime &amp; Safety Analysis – Metro Mindset</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -4775,6 +4775,18 @@ vertical-align: -.125em;
     <a class="dropdown-item" href="./Seth_Individual_Report.html">
  <span class="dropdown-text">Ridership (Seth)</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="./Hugo_Individual_Report.html">
+ <span class="dropdown-text">Reliability (Hugo)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Victor_Individual_Report.html">
+ <span class="dropdown-text">Crime &amp; Safety (Victor)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./Dani_Individual_Report.html">
+ <span class="dropdown-text">Accessibility (Dani)</span></a>
+  </li>  
     </ul>
   </li>
 </ul>
@@ -4794,7 +4806,8 @@ vertical-align: -.125em;
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Victor Individual Report</h1>
+<h1 class="title">Crime &amp; Safety Analysis</h1>
+<p class="subtitle lead">by Victor Louie</p>
 </div>
 
 
@@ -4820,6 +4833,7 @@ vertical-align: -.125em;
 <section id="data-cleaning" class="level1">
 <h1>Data Cleaning</h1>
 <p>Here is a snippet of the original data format:</p>
+<p>![](images/arrest_to_complaint_ratio.png)</p>
 <p>The issues:</p>
 <ul>
 <li><p>There is no date format</p></li>
@@ -4903,6 +4917,8 @@ vertical-align: -.125em;
 <span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a>    output_file.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Here is a snippet of the altered data format:</p>
+<p>![](images/top_10_precincts_by_complaints.png)</p>
 <section id="loading-the-data" class="level3">
 <h3 class="anchored" data-anchor-id="loading-the-data">Loading the Data</h3>
 <p>The following code will load the necessary packages needed to answer the our primary question: Is the MTA NYC Subway overall better, worse, or about the same as they were pre-pandemic. The code will pull up the output csv file created earlier from the python file.</p>

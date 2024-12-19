@@ -1,5 +1,6 @@
 ---
-title: "Group Project Section by Hugo Andrade"
+title: "MTA Reliability Analysis"
+subtitle: "by Hugo Andrade"
 format: html
 editor: visual
 ---
@@ -44,7 +45,7 @@ library(ggcorrplot)
 library(scales)  # For formatting numbers
 
 # Load the data
-file_path <- "data/MTA_Agency_Wide_Data_For_R.xlsx"
+file_path <- "data/reliability/MTA_Agency_Wide_Data_For_R.xlsx"
 data <- read_excel(file_path)
 
 # Clean column names (if necessary)

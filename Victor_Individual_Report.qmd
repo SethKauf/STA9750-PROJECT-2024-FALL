@@ -1,5 +1,6 @@
 ---
-title: Victor Individual Report
+title: "Crime & Safety Analysis"
+subtitle: "by Victor Louie"
 format: html
 editor: visual
 css: styles.css
@@ -16,6 +17,8 @@ However, Precinct sectors do not mean anything because the average person does n
 # Data Cleaning
 
 Here is a snippet of the original data format:
+
+\![\](images/arrest_to_complaint_ratio.png)
 
 The issues:
 
@@ -105,6 +108,10 @@ if __name__ == "__main__":
     output_file.close()
 ```
 
+Here is a snippet of the altered data format:
+
+\![\](images/top_10_precincts_by_complaints.png)
+
 ### Loading the Data
 
 The following code will load the necessary packages needed to answer the our primary question: Is the MTA NYC Subway overall better, worse, or about the same as they were pre-pandemic. The code will pull up the output csv file created earlier from the python file.
@@ -130,9 +137,9 @@ if (!file.exists("output.csv")) {
 }
 
 # Assign the CSV files
-Crimes <- read_csv("data/crimes_output.csv")
-Precinct_Location <- read_csv("data/Precinct_Location.csv")
-Complaint <- read_csv("data/complaint.csv")
+Crimes <- read_csv("data/safety/crimes_output.csv")
+Precinct_Location <- read_csv("data/safety/Precinct_Location.csv")
+Complaint <- read_csv("data/safety/complaint.csv")
 ```
 
 ------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 ---
-title: Seth Individual Report
+title: "Ridership Analysis"
+subtitle: "by Seth Kaufman"
 format: html
 css: styles.css
 ---
@@ -7,7 +8,9 @@ css: styles.css
 
 # Introduction
 
-For [Metro Mindset's group project](https://sethkauf.github.io//STA9750-PROJECT-2024-FALL/), I researched, wrote and analyzed ridership in NYC, specifically looking at the decline in MTA Ridership and potentially the increase in other forms of transportation as a reason for the Subway's struggle in returning to pre-pandemic ridership numbers.
+For [Metro Mindset's group project](https://sethkauf.github.io//STA9750-PROJECT-2024-FALL/), I analyzed ridership in NYC, specifically looking at the decline in MTA Ridership and potentially the increase in other forms of transportation as a reason for the Subway's struggle in returning to pre-pandemic ridership numbers.
+
+# Data
 
 Below are various code snippets that can be *unfolded* to follow along in an `R` terminal, however the data is not staged in `R`.
 
@@ -22,6 +25,11 @@ The data comes from two sources:
 
 * `Vehicle_Registrations_By_Boro.xlsx` was created by combining U.S. Census Data for Vehicle Ownership in NYC for each year into a single Excel file.
 
+# R code setup
+
+If you want to code along with the analysis, I've provided the relevant code below, just click the `Code` dropdown button.
+
+The datafiles are stored off GitHub.
 
 ```{r install-packages_[1], echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: TRUE
@@ -50,11 +58,13 @@ library(scales)
 library(tidyverse)
 ```
 
+# Ridership Trends
+
 First a look at the problem: let's see how ridership and the MTA's revenue from the Subway have fared over the past several years.
 
 ```{r ridership-and-revenue_[2], echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: TRUE
-df <- readxl::read_xlsx("data/ridership_costs_summary_stats.xlsx")
+df <- readxl::read_xlsx("data/ridership/ridership_costs_summary_stats.xlsx")
 
 ggplot(df, aes(x = Year)) +
   # plotting the different lines of ridership and $ in a way that pops out
@@ -133,14 +143,32 @@ ggplot(df, aes(x = Year)) +
 
 That 2020 dip has hurt a lot. Ridership is still quite low compared to pre-pandemic. The *Office of the NY State Comptroller* [estimates that it will eventually return to pre-pandemic levels](https://www.osc.ny.gov/files/reports/osdc/pdf/report-17-2025.pdf), but that won't happen for quite sometime.
 
-![](images/OSC_Graph.png)
+![OSC NY predicts a steady increase in ridership over the coming years](images/OSC_Graph.png)
 
-With this in mind, let's look at how other forms of transit that could've overtaken the Subways are going.
+With this in mind, let's look at how other forms of transit that could have overtaken the Subways are going.
+
+# Other Transportation
+
+Because of this decline in ridership combined with an uptick in living here, a good next step was to see how other forms of transit have done in NYC since COVID, specifically vehicle ownership and bike ridership.
+
+The working theory going into this was "are people just driving or biking more?"
+
+## Vehicles
+
+During COVID, one of the many items to find their demand skyrocket were used cars.
+
+Here's a [news report from ABC 7 NY](https://abc7ny.com/used-cars-consumer-reports-pandemic-auto-sales-covid/8949214/?utm_source=chatgpt.com) at the time, for example.
+
+So, did the number of cars in NYC increase that much?
+
+### NYS DMV Analysis
+
+Originally I figured to review DMV registration data.
 
 ```{r read-cars-data_[3], echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: TRUE
 # read in data from cars csv
-cars <- read_csv("data/vehicle_regs.csv")
+cars <- read_csv("data/ridership/vehicle_regs.csv")
 
 # filter cars on Vehicles, check only for counties in NYC
 # select only cols we want and rename them to something more useful for our purposes
@@ -236,17 +264,21 @@ ggplot(car_registration_plot_data, aes(x = year, y = registration_count, color =
         panel.background = element_rect(fill = "gray95", color = NA))
 ```
 
-A major problem with this data was that it updates and removes old registrations.
+It turned out, a major problem with this data was that it updates and removes old registrations.
 
 This means most registrations from before mid-2021 have expired and therefore been removed from the table.
 
-Because of this, I used US Census data to look at vehicle registrations, which had a more complete 10-year lookback.
+The historical datasets hosted on NYS' site only went back a few years, unfortunately. So I found different data.
+
+### U.S. Census Data Analysis
+
+I used US Census data to look at vehicle registrations, which had a more complete 10-year lookback, giving yearly totals for each borough in NYC.
 
 ```{r home-occ-by-county_[5], echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: TRUE
 #### Car Regs -- US Census
 # Using Census Data
-regs <- readxl::read_xlsx("data/Vehicle_Registrations_By_Boro.xlsx", sheet = "Data")
+regs <- readxl::read_xlsx("data/ridership/Vehicle_Registrations_By_Boro.xlsx", sheet = "Data")
 
 # Only want in 4 boros (sorry SI)
 filtered_regs <- regs |>
@@ -268,7 +300,9 @@ ggplot(filtered_regs, aes(x = Year, y = OCC_T, fill = Label)) +
   scale_x_continuous(breaks = seq(min(regs$Year), max(regs$Year), by = 1))
 ```
 
-Reading in the U.S. Census Data, first we can see how home occupancies have grown in NYC over the past few years.
+While gathering the registration data, I also took advantage of the U.S. Census having home-occupancy data in the same table.
+
+A popular "doomerism" about NYC is that people are fleeing it, something which would certainly contribute to why ridership on the Subway might be down, but according to the Census data, we can see how home occupancies have actually grown in NYC over the past few years.
 
 ```{r pivoting-and-filtering_[6], echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: TRUE
@@ -332,7 +366,8 @@ ggplot(regs_tidy_filtered, aes(x = Year, y = Value, fill = Label)) +
   )
 ```
 
-We see from the Census data that vehicle ownership hasn't really risen too much.
+
+From the same data as the home occupancies, we see from that vehicle ownership hasn't really risen too much.
 
 Let's see if we can find some other way to visualize that.
 
@@ -399,14 +434,15 @@ ggplot(regs_tidy_filtered, aes(x = Year, y = Value, color = Label, group = Label
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
-So, vehicle ownership hasn't grown a ton (though it has generally very slightly gone up), but this doesn't really explain what might be going on.
+So, vehicle ownership hasn't grown a lot (though it has generally very slightly gone up), but this doesn't really explain what might be going on.
 
+## Bicycles
 
 So let's look at bike ridership, [*NYC Open Data*](https://data.cityofnewyork.us/Transportation/Bicycle-Counts/uczf-rk3c/about_data) provides a source of `Bicycle Counts` at various locations around the city. The data I'm viewing is from November, so results might differ.
 
 ```{r bike-plot_[8], echo=TRUE, message=FALSE, warning=FALSE}
 #| code-fold: TRUE
-bike_data <- read_csv("data/Bicycle_Counts_20241106.csv")
+bike_data <- read_csv("data/ridership/Bicycle_Counts_20241106.csv")
 
 # format is a bit busted so this fixes it
 bike_data$date <- as.POSIXct(bike_data$date, format = "%m/%d/%Y %I:%M:%S %p")
@@ -441,10 +477,22 @@ ggplot(yearly_counts, aes(x = year, y = total_counts)) +
 
 This doesn't seem to really explain why ridership is down either.
 
+# What Else?
+
 There are several theories for what might be causing the slow return-to-form.
 
 The newspaper *The City* believes that with remote work up and tourism down, for example, that the Subway system will continue to be underutilized.
 
-![](images/the_city_wfh_graph.png)
+![Work From Home Rates in NYC per *The City*](images/the_city_wfh_graph.png)
 
-![](images/the_city_tourism_graph.png)
+![*The City*'s tourism rates based on hotel occupancies in NYC](images/the_city_tourism_graph.png)
+
+# Conclusion
+
+The data I reviewed seemed to counter at least one reason why ridership has not returned to pre-pandemic levels. People are not leaving the City, they seem to not be biking as much, and they are not driving much more than they previously were.
+
+I really like the idea of exploring how remote work has changed the transportation landscape, which is one of the several other interesting areas my group has researched.
+
+This fact that the Subway is struggling to get back to the highs of 2017 also indicates ridership was possibly plateauing or even significantly declining from 2018 - February 2020, before COVID hit.
+
+It's a dirty mess that's always broken down and delayed, but dammit, its our broken down and delayed mess.

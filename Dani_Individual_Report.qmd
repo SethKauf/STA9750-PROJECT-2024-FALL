@@ -1,0 +1,229 @@
+---
+title: "Station Accessibility Analysis"
+subtitle: "by Dani Servius"
+editor: visual
+---
+
+### Introduction:
+
+Our team, Metro Mindset, focused on assessing the overall health of the MTA NYC Subway system during its post-pandemic recovery. As part of this effort, my role was to analyze Accessibility, and focus on ADA compliance within the MTA system. My goal was to answer two key questions: (1) Has subway ADA accessibility improved since the pandemic? and (2) Of the accessible subway stations, how many are fully accessible, meaning equipped with all necessary ADA features such as elevators, ramps, tactile guides, etc.?
+
+#### Analysis:
+
+To evaluate these pre-COVID concerns, I utilized the Data.ny file "MTA Customer Feedback Data: 2014-2019" \[\^1\]. One of my biggest challenges was creating a code to generate a stacked bar chart of the top complaints from 2017, 2018, and 2019. To address this, I cleaned the data file before uploading it.
+
+The cleaning process involved filtering the dataset to include only records from 2017, 2018, and 2019. Next, I filtered the 'Issues' and 'Subject Detail' columns to isolate specific complaints and calculated their counts. I stored the results in separate Excel files labeled by year. I sorted the complaints by count in descending order, keeping only the top 10 complaints for each year. Using the total number of complaints for each year, I calculated the percentage for each issue and added this as a new column.This cleaned and organized data was then used to create a stacked bar chart to visualize the top complaints across 2017, 2018, and 2019.
+
+```{r libraries-first-csv_[1]}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+complaints2017 <- readr::read_csv("data/accessibility/2017Complaints.csv")|>
+  arrange(desc(Count))|>
+  slice_head(n = 10)
+```
+
+```{r second-csv_[2]}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+complaints2018 <- readr::read_csv("data/accessibility/2018Complaints.csv")|>
+  arrange(desc(Count))|>
+  slice_head(n = 10)
+```
+
+```{r third-csv_[3]}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+
+complaints2019 <- readr::read_csv("data/accessibility/2019Complaints.csv")|>
+  arrange(desc(Count))|>
+  slice_head(n = 10)
+```
+
+#### Data Visualization:
+
+Once the complaint files were downloaded, I then created a stacked bar chart that breaks down the top complaints by year. With this visual I was able to conclude, from 2017 and 2019 the top complaint regarding subway elevators has been improper function, needing repairs, or damaged. This data is significant because according to the NYU Wagner publication "Making Transit Accessible for All New Yorkers", “for roughly 13% of New York City’s population, accessing public transportation poses considerable challenges.” \[\^2\]. This analysis highlights the growing accessibility challenges faced by commuters before the pandemic. I was next task with gathering information regarding the subway accessibility after the COVID-19 pandemic.
+
+After downloading the complaint files, I used R and the ggplot2 library to make a stacked bar chart showing the top elevator complaints from 2017 to 2019. The chart made it clear that the biggest issue across all three years about elevators were improper function, needing repairs, or damaged. This stood out as a consistent problem.This data is significant because, as the NYU Wagner reports, “for roughly 13% of New York City’s population, accessing public transportation poses considerable challenges.” \[\^2\] The data shows that accessibility was already a serious issue for many subway riders even before the pandemic.
+
+From here, I moved on to look at how things changed after COVID-19, focusing on whether subway accessibility improved or stayed the same.
+
+```{r data-vis_[4]}
+#| message: false
+#| warning: false
+
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+complaints_data_2017 <- data.frame(
+  IssuesDetail = c("Improper Function/Needs Repair/Damaged", "Leaking / Wet", "Litter / Garbage / Debris", "Add More / Not Enough", "Smoke / Fumes / Smell / Odor", "Difficulty Leaving / Exiting",
+                   "Crowding", "Difficulty Boarding / Entering", "Homeless Present" , "Accessibility Due To Construction"),
+  Count = c(466, 72, 47, 32, 20, 9, 8, 7, 7, 5),
+  Percent = c(68.2284041, 10.5417277, 6.8814056, 4.6852123, 2.9282577, 1.3177160, 
+              1.1713031, 1.0248902, 1.0248902, 0.7320644)
+)
+
+complaints_data_2018 <- data.frame(
+  IssuesDetail = c("Improper Function/Needs Repair/Damaged", "Litter / Garbage / Debris", "Leaking / Wet", 
+                   "Add More / Not Enough", "Smoke / Fumes / Smell / Odor", "Difficulty Leaving / Exiting",
+                   "Crowding", "Too Hot", "Difficulty Boarding / Entering", "Homeless Present"),
+  Count = c(415, 37, 35, 32, 16, 8, 6, 6, 5, 5),
+  Percent = c(73.45132743, 6.548672566, 6.194690265, 5.663716814, 2.831858407, 1.415929204, 
+              1.061946903, 1.061946903, 0.884955752, 0.884955752)
+)
+
+complaints_data_2019 <- data.frame(
+  IssuesDetail = c("Improper Function/Needs Repair/Damaged", "Not Working / Out of Service", "Accessibility Due To Construction", 
+                   "Operating Conditions / Availability", "Add More / Not Enough", "Litter / Garbage / Debris",
+                   "Leaking / Wet", "Smoke/Fumes/Smell/Odor", "Appearance / Cleanliness", "Difficulty Boarding / Entering"),
+  Count = c(487, 476, 133, 114, 65, 40, 34, 29, 18, 12),
+  Percent = c(34.5880682, 33.8068182, 9.4460227, 8.0965909, 4.6164773, 2.8409091, 
+              2.4147727, 2.0596591, 1.2784091, 0.8522727)
+)
+
+
+complaints_data_2017$Year <- "2017"
+complaints_data_2018$Year <- "2018"
+complaints_data_2019$Year <- "2019"
+
+
+combined_complaints_data <- bind_rows(complaints_data_2017, complaints_data_2018, complaints_data_2019)
+
+
+ggplot(combined_complaints_data, aes(x = reorder(IssuesDetail, Percent), y = Percent, fill = Year)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Elevator Complaints by Issue for 2017, 2018 and 2019",
+    x = "Issues",
+    y = "Percent"
+  ) +
+  scale_fill_brewer(palette = "Set2") + 
+  theme_minimal() +
+ theme(
+    axis.text.x = element_text(angle = 29, hjust = 1, vjust = 1),
+    axis.text.y = element_text(size = 8), 
+    strip.text = element_text(size = 9)
+  )
+
+print(combined_complaints_data)
+
+```
+
+#### Visual Map:
+
+To evaluate subway accessibility post the COVID-19 pandemic, I reviewed an article from the MTA discussing the 2020–2024 Capital Program. According to the 2022 MTA press release, “ICYMI: Governor Hochul Announces MTA and Accessibility Advocates Agree on Historic Plan for Expanding Accessibility in the New York City Subway System” \[\^3\], the Capital Program funding will make 81 stations accessible by 2025, 85 more by 2035, another 90 by 2045, and the final 90 by 2055. To validate whether the Capital Program has met its accessibility goals, I created a chart and map showing subway line accessibility, using the Data.ny 'MTA Subway Stations' \[\^4\] dataset.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(readr)
+library(dplyr)
+
+# Load the CSV file
+subwayStations <- read_csv("data/accessibility/MTA_Subway_Stations_20241129.csv")
+
+# Filter out Staten Island and count distinct Station IDs for each ADA value
+ada_counts <- subwayStations |>
+  filter(Line != "Staten Island") |>
+  distinct(`Station ID`, ADA) |>  # Keep distinct Station ID and ADA pairs
+  group_by(ADA) |>
+  summarize(count = n()) |>
+  arrange(ADA)
+
+# Print the counts
+print(ada_counts)
+```
+
+In this dataset, accessibility is represented as follows: 0: Not accessible 1: Fully accessible 2: Partially accessible (usually accessible in only one direction)
+
+To go a long with the chart I created a map of NYC subways categorized by their accessibility status: not accessible, fully accessible, and partially accessible. From this, I was able to gather of the 472 NYC subway stations only 138 are fully accessible while 325 still remain not accessible.
+
+```{r}
+
+#| message: false
+#| warning: false
+
+library(ggplot2)
+library(sf)
+library(dplyr)
+library(readr)
+
+if (!file.exists("data/accessibility/nyc_borough_boundaries.zip")) {
+    download.file("https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&format=Shapefile", 
+                  destfile = "data/accessibility/nyc_borough_boundaries.zip")
+}
+td <- tempdir()
+zip_contents <- unzip("data/accessibility/nyc_borough_boundaries.zip", exdir = td)
+fname_shp <- zip_contents[grepl("shp$", zip_contents)]
+nyc_sf <- read_sf(fname_shp)
+
+# Load subway stations data
+subwayStations <- read_csv("data/accessibility/MTA_Subway_Stations_20241129.csv")
+
+# Process the data and create an sf object, filtering out Staten Island
+stations_sf <- subwayStations |>
+  filter(Line != "Staten Island") |>  # Exclude Staten Island
+  select(ADA, Latitude = `GTFS Latitude`, Longitude = `GTFS Longitude`) |>
+  filter(!is.na(Latitude) & !is.na(Longitude)) |>  # Remove rows with missing coordinates
+  mutate(ADA = factor(ADA)) |>  # Convert ADA to factor for discrete mapping
+  st_as_sf(coords = c("Longitude", "Latitude"), crs = 4326)
+
+# Create a map of NYC subway stations with ADA compliance
+ggplot() + 
+  geom_sf(data = nyc_sf, aes(geometry = geometry), fill = NA, color = "black") +  # NYC boundaries
+  geom_sf(data = stations_sf, aes(geometry = geometry, color = ADA), size = 0.8, alpha = 0.7) +  # Reduce dot size and add transparency
+  scale_color_manual(
+    values = c("0" = "pink", "1" = "blue", "2" = "red"),  # Customize colors for ADA levels
+    labels = c("Not Accessible", "Partially Accessible", "Fully Accessible"),
+    name = "ADA Compliance"
+  ) +
+  labs(
+    title = "NYC Subway Stations with ADA Compliance (Excluding Staten Island)",
+    caption = "Data Source: MTA"
+  ) +
+  theme_minimal(base_size = 14) +
+  theme(
+    plot.title = element_text(hjust = 0.5, size = 10),  # Center and enlarge title
+    legend.position = "right"
+  )
+
+# Adjust the size and aspect ratio of the plot
+ggsave("images/NYC_Subway_ADA_Map_Excluding_Staten_Island.png", width = 12, height = 8, dpi = 300)
+
+print("images/NYC_Subway_ADA_Map_Excluding_Staten_Island.png")
+```
+
+Since the dataset did not include accessibility data from before or during the pandemic, I used additional information from "Making Transit Accessible for All New Yorkers"
+
+Since the dataset did not include data on accessibility prior or during the pandemic to help with my analysis of finding out if the Capital Program has been able to keep up with its agreement, I decided to use the NYU Wagner publication "Making Transit Accessible for All New Yorkers". According to the publication, between 2020 and 2026, only 26 stations have been made accessible.
+
+\![\](images/station_count.png)
+
+One of the limitations of the dataset is it included Staten Island which my group agreed not to include. Although Staten Island was included I was still able to conclude the Capital Programs goal of completing 81 but 2025 will not be meet unless the pace of the process is accelerated
+
+Conclusion:
+
+My analysis revealed that, out of the 472 subway stations in New York City, only 138 are fully accessible. This highlights that, despite the MTA's progress in improving accessibility, significant work remains to be done.
+
+\[\^1\] <https://data.ny.gov/Transportation/MTA-Customer-Feedback-Data-2014-2019/tppa-s6t6/data_preview>
+
+\[\^2\] <https://wagner.nyu.edu/files/faculty/publications/Making%20Transit%20Accessible%20for%20All%20New%20Yorkers%20%283%29.pdf>
+
+\[\^3\] <https://new.mta.info/press-release/icymi-governor-hochul-announces-mta-and-accessibility-advocates-agree-historic-plan>
+
+\[\^4\] <https://data.ny.gov/Transportation/MTA-Subway-Stations/39hk-dx4f/about_data>

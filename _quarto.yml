@@ -21,7 +21,8 @@ website:
             href: Hugo_Individual_Report.qmd
           - text: "Crime & Safety (Victor)"
             href: Victor_Individual_Report.qmd
-    
+          - text: "Accessibility (Dani)"
+            href: Dani_Individual_Report.qmd
 format:
   html:
     theme: lux
