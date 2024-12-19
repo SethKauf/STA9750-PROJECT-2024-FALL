@@ -1,6 +1,6 @@
 ---
 title: "MTA/Rideshare Revenue Analysis"
-author: "by Hassan Adolphus"
+author: "Hassan Adolphus"
 editor: visual
 code-fold: true
 ---

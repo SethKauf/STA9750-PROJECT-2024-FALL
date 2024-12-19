@@ -1,6 +1,6 @@
 ---
 title: "Ridership Analysis"
-subtitle: "by Seth Kaufman"
+author: "Seth Kaufman"
 format: html
 css: styles.css
 ---
@@ -8,7 +8,7 @@ css: styles.css
 
 # Introduction
 
-For [Metro Mindset's group project](https://sethkauf.github.io//STA9750-PROJECT-2024-FALL/), I analyzed ridership in NYC, specifically looking at the decline in MTA Ridership and potentially the increase in other forms of transportation as a reason for the Subway's struggle in returning to pre-pandemic ridership numbers.
+For Metro Mindset's group project[^1], I analyzed ridership in NYC, specifically looking at the decline in MTA Ridership and potentially the increase in other forms of transportation as a reason for the Subway's struggle in returning to pre-pandemic ridership numbers.
 
 # Data
 
@@ -141,7 +141,7 @@ ggplot(df, aes(x = Year)) +
   )
 ```
 
-That 2020 dip has hurt a lot. Ridership is still quite low compared to pre-pandemic. The *Office of the NY State Comptroller* [estimates that it will eventually return to pre-pandemic levels](https://www.osc.ny.gov/files/reports/osdc/pdf/report-17-2025.pdf), but that won't happen for quite sometime.
+That 2020 dip has hurt a lot. Ridership is still quite low compared to pre-pandemic. The *Office of the NY State Comptroller* estimates that it will eventually return to pre-pandemic levels[^2], but that won't happen for quite sometime.
 
 <div class="center-image">
   ![OSC NY predicts a steady increase in ridership over the coming years](images/OSC_Graph.png)
@@ -159,9 +159,7 @@ The working theory going into this was "are people just driving or biking more?"
 
 ## Vehicles
 
-During COVID, one of the many items to find their demand skyrocket were used cars.
-
-Here's a [news report from ABC 7 NY](https://abc7ny.com/used-cars-consumer-reports-pandemic-auto-sales-covid/8949214/?utm_source=chatgpt.com) at the time, for example.
+During COVID, one of the many items to find their demand skyrocket were used cars[^3].
 
 So, did the number of cars in NYC increase that much?
 
@@ -485,7 +483,7 @@ This doesn't seem to really explain why ridership is down either.
 
 There are several theories for what might be causing the slow return-to-form.
 
-The newspaper *The City* believes that with remote work up and tourism down, for example, that the Subway system will continue to be underutilized.
+The newspaper *The City*[^4] believes that with remote work up and tourism down, for example, that the Subway system will continue to be underutilized.
 
 <div class="center-image">
   ![Work From Home Rates in NYC per *The City*](images/the_city_wfh_graph.png)
@@ -504,3 +502,14 @@ I really like the idea of exploring how remote work has changed the transportati
 This fact that the Subway is struggling to get back to the highs of 2017 also indicates ridership was possibly plateauing or even significantly declining from 2018 - February 2020, before COVID hit.
 
 It's a dirty mess that's always broken down and delayed, but dammit, its our broken down and delayed mess.
+
+
+### Citations
+
+[^1]: [Metro Mindset Group Project](https://sethkauf.github.io//STA9750-PROJECT-2024-FALL/)
+
+[^2]: [Office of the New York State Comptroller Report on the MTA, October 2024](https://www.osc.ny.gov/files/reports/osdc/pdf/report-17-2025.pdf)
+
+[^3]: [ABC 7 NY News Report on Used Car Market, December 2020](https://abc7ny.com/used-cars-consumer-reports-pandemic-auto-sales-covid/8949214/)
+
+[^4]: [The City's analysis of the MTA and its road to recovery](https://projects.thecity.nyc/hows-new-york-city-doing/)

@@ -1,6 +1,6 @@
 ---
 title: "MTA Reliability Analysis"
-subtitle: "by Hugo Andrade"
+author: "Hugo Andrade"
 format: html
 editor: visual
 ---

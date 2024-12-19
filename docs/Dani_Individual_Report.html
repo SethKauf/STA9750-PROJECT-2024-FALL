@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Dani Servius">
 
 <title>Station Accessibility Analysis – Metro Mindset</title>
 <style>
@@ -4810,13 +4811,18 @@ vertical-align: -.125em;
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Station Accessibility Analysis</h1>
-<p class="subtitle lead">by Dani Servius</p>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Dani Servius </p>
+          </div>
+  </div>
     
   
     
@@ -4832,7 +4838,7 @@ vertical-align: -.125em;
 <p>Our team, Metro Mindset, focused on assessing the overall health of the MTA NYC Subway system during its post-pandemic recovery. As part of this effort, my role was to analyze Accessibility, and focus on ADA compliance within the MTA system. My goal was to answer two key questions: (1) Has subway ADA accessibility improved since the pandemic? and (2) Of the accessible subway stations, how many are fully accessible, meaning equipped with all necessary ADA features such as elevators, ramps, tactile guides, etc.?</p>
 <section id="analysis" class="level4">
 <h4 class="anchored" data-anchor-id="analysis">Analysis:</h4>
-<p>To evaluate these pre-COVID concerns, I utilized the Data.ny file “MTA Customer Feedback Data: 2014-2019” [^1]. One of my biggest challenges was creating a code to generate a stacked bar chart of the top complaints from 2017, 2018, and 2019. To address this, I cleaned the data file before uploading it.</p>
+<p>To evaluate these pre-COVID concerns, I utilized the Data.ny file “MTA Customer Feedback Data: 2014-2019”<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. One of my biggest challenges was creating a code to generate a stacked bar chart of the top complaints from 2017, 2018, and 2019. To address this, I cleaned the data file before uploading it.</p>
 <p>The cleaning process involved filtering the dataset to include only records from 2017, 2018, and 2019. Next, I filtered the ‘Issues’ and ‘Subject Detail’ columns to isolate specific complaints and calculated their counts. I stored the results in separate Excel files labeled by year. I sorted the complaints by count in descending order, keeping only the top 10 complaints for each year. Using the total number of complaints for each year, I calculated the percentage for each issue and added this as a new column.This cleaned and organized data was then used to create a stacked bar chart to visualize the top complaints across 2017, 2018, and 2019.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
@@ -4864,8 +4870,8 @@ vertical-align: -.125em;
 </section>
 <section id="data-visualization" class="level4">
 <h4 class="anchored" data-anchor-id="data-visualization">Data Visualization:</h4>
-<p>Once the complaint files were downloaded, I then created a stacked bar chart that breaks down the top complaints by year. With this visual I was able to conclude, from 2017 and 2019 the top complaint regarding subway elevators has been improper function, needing repairs, or damaged. This data is significant because according to the NYU Wagner publication “Making Transit Accessible for All New Yorkers”, “for roughly 13% of New York City’s population, accessing public transportation poses considerable challenges.” [^2]. This analysis highlights the growing accessibility challenges faced by commuters before the pandemic. I was next task with gathering information regarding the subway accessibility after the COVID-19 pandemic.</p>
-<p>After downloading the complaint files, I used R and the ggplot2 library to make a stacked bar chart showing the top elevator complaints from 2017 to 2019. The chart made it clear that the biggest issue across all three years about elevators were improper function, needing repairs, or damaged. This stood out as a consistent problem.This data is significant because, as the NYU Wagner reports, “for roughly 13% of New York City’s population, accessing public transportation poses considerable challenges.” [^2] The data shows that accessibility was already a serious issue for many subway riders even before the pandemic.</p>
+<p>Once the complaint files were downloaded, I then created a stacked bar chart that breaks down the top complaints by year. With this visual I was able to conclude, from 2017 and 2019 the top complaint regarding subway elevators has been improper function, needing repairs, or damaged. This data is significant because according to the NYU Wagner publication “Making Transit Accessible for All New Yorkers”, “for roughly 13% of New York City’s population, accessing public transportation poses considerable challenges”<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. This analysis highlights the growing accessibility challenges faced by commuters before the pandemic. I was next task with gathering information regarding the subway accessibility after the COVID-19 pandemic.</p>
+<p>After downloading the complaint files, I used R and the ggplot2 library to make a stacked bar chart showing the top elevator complaints from 2017 to 2019. The chart made it clear that the biggest issue across all three years about elevators were improper function, needing repairs, or damaged. This stood out as a consistent problem.This data is significant because, as the NYU Wagner reports, “for roughly 13% of New York City’s population, accessing public transportation poses considerable challenges.” The data shows that accessibility was already a serious issue for many subway riders even before the pandemic.</p>
 <p>From here, I moved on to look at how things changed after COVID-19, focusing on whether subway accessibility improved or stayed the same.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -4966,7 +4972,7 @@ vertical-align: -.125em;
 </section>
 <section id="visual-map" class="level4">
 <h4 class="anchored" data-anchor-id="visual-map">Visual Map:</h4>
-<p>To evaluate subway accessibility post the COVID-19 pandemic, I reviewed an article from the MTA discussing the 2020–2024 Capital Program. According to the 2022 MTA press release, “ICYMI: Governor Hochul Announces MTA and Accessibility Advocates Agree on Historic Plan for Expanding Accessibility in the New York City Subway System” [^3], the Capital Program funding will make 81 stations accessible by 2025, 85 more by 2035, another 90 by 2045, and the final 90 by 2055. To validate whether the Capital Program has met its accessibility goals, I created a chart and map showing subway line accessibility, using the Data.ny ‘MTA Subway Stations’ [^4] dataset.</p>
+<p>To evaluate subway accessibility post the COVID-19 pandemic, I reviewed an article from the MTA discussing the 2020–2024 Capital Program. According to the 2022 MTA press release, “ICYMI: Governor Hochul Announces MTA and Accessibility Advocates Agree on Historic Plan for Expanding Accessibility in the New York City Subway System”<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, the Capital Program funding will make 81 stations accessible by 2025, 85 more by 2035, another 90 by 2045, and the final 90 by 2055. To validate whether the Capital Program has met its accessibility goals, I created a chart and map showing subway line accessibility, using the Data.ny ‘MTA Subway Stations’<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> dataset.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
@@ -5083,16 +5089,21 @@ lgl  (1): CBD
 <p>One of the limitations of the dataset is it included Staten Island which my group agreed not to include. Although Staten Island was included I was still able to conclude the Capital Programs goal of completing 81 but 2025 will not be meet unless the pace of the process is accelerated</p>
 <p>Conclusion:</p>
 <p>My analysis revealed that, out of the 472 subway stations in New York City, only 138 are fully accessible. This highlights that, despite the MTA’s progress in improving accessibility, significant work remains to be done.</p>
-<p>[^1] <a href="https://data.ny.gov/Transportation/MTA-Customer-Feedback-Data-2014-2019/tppa-s6t6/data_preview" class="uri">https://data.ny.gov/Transportation/MTA-Customer-Feedback-Data-2014-2019/tppa-s6t6/data_preview</a></p>
-<p>[^2] <a href="https://wagner.nyu.edu/files/faculty/publications/Making%20Transit%20Accessible%20for%20All%20New%20Yorkers%20%283%29.pdf" class="uri">https://wagner.nyu.edu/files/faculty/publications/Making%20Transit%20Accessible%20for%20All%20New%20Yorkers%20%283%29.pdf</a></p>
-<p>[^3] <a href="https://new.mta.info/press-release/icymi-governor-hochul-announces-mta-and-accessibility-advocates-agree-historic-plan" class="uri">https://new.mta.info/press-release/icymi-governor-hochul-announces-mta-and-accessibility-advocates-agree-historic-plan</a></p>
-<p>[^4] <a href="https://data.ny.gov/Transportation/MTA-Subway-Stations/39hk-dx4f/about_data" class="uri">https://data.ny.gov/Transportation/MTA-Subway-Stations/39hk-dx4f/about_data</a></p>
 
 
 </section>
 </section>
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p><a href="https://data.ny.gov/Transportation/MTA-Customer-Feedback-Data-2014-2019/tppa-s6t6/data_preview">MTA Customer Feedback Data, 2014-2019, published August 2024</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p><a href="chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://wagner.nyu.edu/files/faculty/publications/Making Transit Accessible for All New Yorkers (3).pdf">Accelerating Progress: Making Transit Accessible for All New Yorkers, NYU, published January 2024</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://new.mta.info/press-release/icymi-governor-hochul-announces-mta-and-accessibility-advocates-agree-historic-plan">Gov. Hochul &amp; ADA Advocates Agree on Accessibility Plan, MTA, June 2022</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p><a href="https://data.ny.gov/Transportation/MTA-Subway-Stations/39hk-dx4f/about_data">MTA Subway Stations Data, DATA.NY.GOV, August 2024</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
