@@ -10,7 +10,7 @@ The group at Metro Mindset consists of five New Yorkers who frequently use the M
 
 The MTA has been through it over the years, and especially with the COVID pandemic in 2020 where ridership plummeted.
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Source: New York Times](images/nyt_covid_ridership_decline.png)
 </div>
 
@@ -60,7 +60,7 @@ We researched three categories to analyze this question:
 
 ## Ridership over time
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Comparing ridership and revenue in NYC](images/Ridership_and_Revenue_Graph.png)
 </div>
 
@@ -70,13 +70,13 @@ Expenses is "inverted", it should be noted that when it says, for example, $-\$3
 
 Although ridership (and by extent, revenue) are growing and are projected to reach an under-19% difference from 2019's figures by 2028 per the *Office of the New York State Comptroller*, it still will have a way to go to recover to pre-pandemic levels of ridership.
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![OSC NY predicts a steady increase in ridership over the coming years](images/OSC_Graph.png)
 </div>
 
 It is interesting to note that home occupied homes have actually grown in this time period:
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Occupied homes per year in NYC](images/occ_homes_per_year_by_county.png)
 </div>
 
@@ -94,7 +94,7 @@ Here's a [news report from ABC 7 NY](https://abc7ny.com/used-cars-consumer-repor
 
 So, did the number of cars in NYC increase that much?
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Vehicle registrations in NYC](images/vehicle_ownership.png)
 </div>
 
@@ -104,7 +104,7 @@ The other form of transit reviewed was biking.
 
 According to one source ([NYC DOT on NYC Open Data](https://data.cityofnewyork.us/Transportation/Bicycle-Counts/uczf-rk3c/about_data)), biking seems to be down in the city, at least at the popularly monitored locations of the DOT.
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Bike ridership data tracked across several locations in NYC](images/bike_ridership.png)
 </div>
 
@@ -114,11 +114,11 @@ Possible explanations for what might be causing the slow-return to pre-pandemic 
 
 We [found analysis](https://projects.thecity.nyc/hows-new-york-city-doing/index.html#subway-ridership) from a newspaper *The City* that seemed to reflect this thinking, though we'll be discussing remote-work further down as well.
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Work From Home Rates in NYC per *The City*](images/the_city_wfh_graph.png)
 </div>
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![*The City*'s tourism rates based on hotel occupancies in NYC](images/the_city_tourism_graph.png)
 </div>
 
@@ -128,7 +128,7 @@ Ridership's slow recovery combined with the MTA's ever-growing expenses does sho
 
 How has the MTA's Fare-Revenue changed?
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![MTA Fare Revenue 2019 - 2024](images/mta_monthly_fare_revenue.jpeg)
 </div>
 
@@ -138,7 +138,7 @@ The MTA's revenue, which relies heavily on Subway and Bus fares, took a signific
 
 ### Have For Hire Vehicles (FHVs) Affected the MTA’s Fare Revenue?
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Rideshare Revenue 2017 - 2024](images/rideshare_monthly_revenue.jpeg)
 </div>
 
@@ -159,7 +159,7 @@ Furthermore, as a result of increasing remote work policies, commuting patterns 
 
 The Metropolitan Transportation Authority (MTA) operates a vast transit system that connects millions of riders across New York City and beyond. By analyzing ridership trends, we can reveal how different services are interlinked. Subway, Metro-North Railroad (MNR), Long Island Rail Road (LIRR), and NYCT Bus show strong connections, with ridership patterns that closely follow one another. In contrast, Access-A-Ride (AAR), MTA Bus, and Bridges and Tunnels (BT) exhibit moderate correlations, serving specific roles that complement the larger system. Staten Island Railway (SIR), with its more localized ridership, demonstrates weaker links to the other services.
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Correlation of the Subway's ridership with other systems](images/subway_reliability_corr_matrix.png)
 </div>
 
@@ -175,7 +175,7 @@ To explore these pre-COVID concerns, we analyzed the MTA Customer Feedback Data:
 
 To evaluate accessibility progress, we used the NYC Open Data set, "MTA Subway Stations Map", to create a map of subway lines based on accessibility. For consistency, Staten Island stations were excluded.
 
-<div class="center-image">
+<div class="center-image" style="text-align: center;">
   ![Subways with ADA Compliance in NYC excl. Staten Island](images/NYC_Subway_ADA_Map_Excluding_Staten_Island.png)
 </div>
 
