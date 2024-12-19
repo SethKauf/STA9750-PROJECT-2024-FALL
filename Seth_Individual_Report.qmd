@@ -143,7 +143,11 @@ ggplot(df, aes(x = Year)) +
 
 That 2020 dip has hurt a lot. Ridership is still quite low compared to pre-pandemic. The *Office of the NY State Comptroller* [estimates that it will eventually return to pre-pandemic levels](https://www.osc.ny.gov/files/reports/osdc/pdf/report-17-2025.pdf), but that won't happen for quite sometime.
 
-![OSC NY predicts a steady increase in ridership over the coming years](images/OSC_Graph.png)
+<div class="center-image">
+  ![OSC NY predicts a steady increase in ridership over the coming years](images/OSC_Graph.png)
+</div>
+
+
 
 With this in mind, let's look at how other forms of transit that could have overtaken the Subways are going.
 
@@ -483,9 +487,13 @@ There are several theories for what might be causing the slow return-to-form.
 
 The newspaper *The City* believes that with remote work up and tourism down, for example, that the Subway system will continue to be underutilized.
 
-![Work From Home Rates in NYC per *The City*](images/the_city_wfh_graph.png)
+<div class="center-image">
+  ![Work From Home Rates in NYC per *The City*](images/the_city_wfh_graph.png)
+</div>
 
-![*The City*'s tourism rates based on hotel occupancies in NYC](images/the_city_tourism_graph.png)
+<div class="center-image">
+  ![*The City*'s tourism rates based on hotel occupancies in NYC](images/the_city_tourism_graph.png)
+</div>
 
 # Conclusion
 

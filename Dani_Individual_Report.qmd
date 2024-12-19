@@ -127,7 +127,7 @@ print(combined_complaints_data)
 
 To evaluate subway accessibility post the COVID-19 pandemic, I reviewed an article from the MTA discussing the 2020–2024 Capital Program. According to the 2022 MTA press release, “ICYMI: Governor Hochul Announces MTA and Accessibility Advocates Agree on Historic Plan for Expanding Accessibility in the New York City Subway System” \[\^3\], the Capital Program funding will make 81 stations accessible by 2025, 85 more by 2035, another 90 by 2045, and the final 90 by 2055. To validate whether the Capital Program has met its accessibility goals, I created a chart and map showing subway line accessibility, using the Data.ny 'MTA Subway Stations' \[\^4\] dataset.
 
-```{r}
+```{r map-data_[5]}
 #| message: false
 #| warning: false
 
@@ -153,7 +153,7 @@ In this dataset, accessibility is represented as follows: 0: Not accessible 1: F
 
 To go a long with the chart I created a map of NYC subways categorized by their accessibility status: not accessible, fully accessible, and partially accessible. From this, I was able to gather of the 472 NYC subway stations only 138 are fully accessible while 325 still remain not accessible.
 
-```{r}
+```{r boro-map_[6]}
 
 #| message: false
 #| warning: false
@@ -212,7 +212,9 @@ Since the dataset did not include accessibility data from before or during the p
 
 Since the dataset did not include data on accessibility prior or during the pandemic to help with my analysis of finding out if the Capital Program has been able to keep up with its agreement, I decided to use the NYU Wagner publication "Making Transit Accessible for All New Yorkers". According to the publication, between 2020 and 2026, only 26 stations have been made accessible.
 
-\![\](images/station_count.png)
+::: center-image
+![](images/station_count.png)
+:::
 
 One of the limitations of the dataset is it included Staten Island which my group agreed not to include. Although Staten Island was included I was still able to conclude the Capital Programs goal of completing 81 but 2025 will not be meet unless the pace of the process is accelerated
 

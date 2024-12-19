@@ -17,6 +17,8 @@ website:
         menu: 
           - text: "Ridership (Seth)"
             href: Seth_Individual_Report.qmd
+          - text: "Revenue (Hassan)"
+            href: Hassan_Individual_Report.qmd
           - text: "Reliability (Hugo)"
             href: Hugo_Individual_Report.qmd
           - text: "Crime & Safety (Victor)"

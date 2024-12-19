@@ -18,7 +18,9 @@ However, Precinct sectors do not mean anything because the average person does n
 
 Here is a snippet of the original data format:
 
-\![\](images/arrest_to_complaint_ratio.png)
+::: center-image
+![](images/crime_data_before.jpeg)
+:::
 
 The issues:
 
@@ -110,7 +112,9 @@ if __name__ == "__main__":
 
 Here is a snippet of the altered data format:
 
-\![\](images/top_10_precincts_by_complaints.png)
+::: center-image
+![](images/crime_data_after.jpeg)
+:::
 
 ### Loading the Data
 
