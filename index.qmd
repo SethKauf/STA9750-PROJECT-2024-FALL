@@ -189,8 +189,6 @@ These insights can help the MTA plan resources better, ensuring the transit syst
 
 # Reliability
 
-How has the MTA as a system fared over the past few years?
-
 ## Accessibility
 
 The public transit system in New York City is the biggest form of transportation. However, according to the NYU Wagner publication "Making Transit Accessible for All New Yorkers", “for roughly 13% of New York City’s population, accessing public transportation poses considerable challenges”. Before the pandemic, the MTA received increasing elevator-related complaints, regarding improper function, needing repairs, or damaged. To explore these pre-COVID concerns, we analyzed the MTA Customer Feedback Data: 2014–2019, filtering the dataset to focus on subway complaints from 2017, 2018, and 2019. I was unable to find a dataset that aligned with my vision for the analysis, so I had to manually clean the complaints data before uploading. Despite this limitation, the stacked bar chart highlighted the ongoing trend of elevator-related complaints across 2017, 2018, and 2019 and accessibility challenges faced by commuters before the pandemic.
