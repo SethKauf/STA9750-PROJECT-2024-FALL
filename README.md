@@ -6,7 +6,7 @@
 
 [@Dani-0000](https://github.com/Dani-0000) favorite Train Line: LIRR
 
-[@slyastrologer](https://github.com/slyastrologer)
+[@slyastrologer](https://github.com/slyastrologer), favorite Subway Line: 7
 
 [@SethKauf](https://github.com/SethKauf) favorite Subway Line: A Train
 
